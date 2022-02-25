@@ -5,6 +5,10 @@ const session = require('express-session');
 
 const app = express();
 
+// Middlewares
+const notFound = require('./middlewares/not-found');
+const errorHandler = require('./middlewares/error-handler');
+
 // Template engine configuration
 nunjucks.configure('views', {
   autoescape: true,
@@ -24,6 +28,9 @@ if (process.env.ENVIRONMENT === 'production') {
 };
 
 app.use(session(sess));
+
+app.use(notFound);
+app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
 const startServer = async () => {
