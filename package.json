@@ -1,0 +1,36 @@
+{
+  "name": "express_polls",
+  "version": "1.0.0",
+  "description": "Um site que permite a criação de votações online.",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViniciusBessa/express_polls.git"
+  },
+  "keywords": [
+    "express",
+    "polls"
+  ],
+  "author": "Vinicius",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ViniciusBessa/express_polls/issues"
+  },
+  "homepage": "https://github.com/ViniciusBessa/express_polls#readme",
+  "dependencies": {
+    "connect-session-knex": "^2.1.1",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "knex": "^1.0.3",
+    "nunjucks": "^3.2.3",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
