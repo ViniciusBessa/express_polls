@@ -1,11 +1,19 @@
 const express = require('express');
 require('dotenv').config();
 const nunjucks = require('nunjucks');
+
 const session = require('express-session');
+const KnexSessionStore = require('connect-session-knex')(session);
+const db = require('./db/db');
+const store = new KnexSessionStore({ knex: db });
 
 const app = express();
 
 // Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use('/css', express.static('./public/css'));
+app.use('/script', express.static('./public/script'));
 const notFound = require('./middlewares/not-found');
 const errorHandler = require('./middlewares/error-handler');
 
@@ -21,6 +29,7 @@ const sess = {
   resave: false,
   saveUninitialized: true,
   cookie: {},
+  store,
 };
 
 if (process.env.ENVIRONMENT === 'production') {
