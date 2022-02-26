@@ -1,0 +1,32 @@
+:root {
+  font-size: 1.2em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+}
+
+.theme-dark {
+  --primary-color: #3ADA70;
+  --secondary-color: #393939;
+  --font-color: #ffffff;
+}
+
+.theme-light {
+  --primary-color: #3ADA70;
+  --secondary-color: #f7f7f7;
+  --font-color: #000000;
+}
+
+.background {
+  background-color: var(--secondary-color);
+}
+
+.font-color {
+  color: var(--font-color);
+}

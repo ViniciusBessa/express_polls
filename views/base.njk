@@ -4,10 +4,12 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Polls</title>
+    <link rel="stylesheet" href="/css/base.css"/>
+    <link rel="stylesheet" href="/css/navbar.css"/>
     {% block head %}
     {% endblock %}
   </head>
-  <body>
+  <body class="background font-color">
     <header>
       {% include "navbar.njk" %}
     </header>
@@ -15,5 +17,9 @@
       {% block main %}
       {% endblock %}
     </main>
+    <footer>
+      <script src="/script/navbar.js"></script>
+      <script src="/script/alterarTema.js"></script>
+    </footer>
   </body>
 </html>
