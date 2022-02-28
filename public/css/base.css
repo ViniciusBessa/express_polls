@@ -1,5 +1,6 @@
 :root {
   font-size: 1.2em;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 * {
@@ -29,4 +30,39 @@ body {
 
 .font-color {
   color: var(--font-color);
+}
+
+/* Alerts */
+.alert {
+  border-radius: 100px;
+  padding: 12px;
+  margin: 15px auto;
+  width: fit-content;
+  color: #000000;
+}
+
+.alert__button {
+  background-color: transparent;
+  border: 1px solid #000000;
+  border-radius: 50%;
+  font-size: 0.9em;
+}
+
+.alert__button:hover {
+  opacity: 50%;
+}
+
+.alert--success {
+  background-color: var(--primary-color);
+  border: 1px solid #228845;
+}
+
+.alert--warning {
+  background-color: #F2CF18;
+  border: 1px solid #C1A616;
+}
+
+.alert--error {
+  background-color: #F54C41;
+  border: 1px solid #C94239;
 }

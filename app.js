@@ -15,7 +15,7 @@ const userRoute = require('./routes/user');
 const notFound = require('./middlewares/not-found');
 const errorHandler = require('./middlewares/error-handler');
 
-// Middlewares
+// Express middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use('/css', express.static('./public/css'));

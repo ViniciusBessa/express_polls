@@ -4,7 +4,7 @@
   min-height: 63px;
   padding: 10px 20px 10px 20px;
   gap: 30px;
-  border-bottom: 3px solid var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
 }
 
 .navbar__toggler {
@@ -12,6 +12,10 @@
   background-color: transparent;
   border: none;
   padding: 0;
+}
+
+.navbar__toggler:focus {
+  opacity: 70%;
 }
 
 .navbar__container {

@@ -6,20 +6,25 @@
     <title>Polls</title>
     <link rel="stylesheet" href="/css/base.css"/>
     <link rel="stylesheet" href="/css/navbar.css"/>
-    {% block head %}
-    {% endblock %}
+    {% block head %}{% endblock %}
   </head>
   <body class="background font-color">
     <header>
       {% include "navbar.njk" %}
     </header>
     <main>
-      {% block main %}
-      {% endblock %}
+      {% if message %}
+        <div class="alert alert--{{ message.tag }}">
+          <span>{{ message.text }}</span>
+          <button class="alert__button">X</button>
+        </div>
+      {% endif %}
+      {% block main %}{% endblock %}
     </main>
     <footer>
       <script src="/script/navbar.js"></script>
       <script src="/script/alterarTema.js"></script>
+      <script src="/script/message.js"></script>
     </footer>
   </body>
 </html>
