@@ -1,0 +1,26 @@
+.form {
+  width: 500px;
+  margin: 50px auto;
+}
+
+.form__title {
+  border-bottom: 1px solid var(--primary-color);
+}
+
+.form__input {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  color: inherit;
+  border-bottom: 1px solid var(--primary-color);
+  outline: none;
+  font-size: 1em;
+  margin-bottom: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+  .form {
+    width: 90%;
+  }
+}

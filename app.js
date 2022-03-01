@@ -48,7 +48,7 @@ app.use(session(sess));
 
 // Routes
 app.use('/', mainRoute);
-app.use('/usuario', userRoute);
+app.use('/conta', userRoute);
 
 app.use(notFound);
 app.use(errorHandler);
