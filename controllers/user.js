@@ -4,10 +4,6 @@ const db = require('../db/db');
 const crypto = require('crypto');
 
 const getPaginaCadastro = asyncWrapper(async (req, res) => {
-  // Verificando se o usuário já está autenticado, se sim, ele é redirecionado à home
-  if (req.user.isAuthenticated) {
-    return res.status(400).redirect('/');
-  }
   res.status(200).render('cadastro');
 });
 
@@ -15,17 +11,13 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
   const { username, password, email } = req.body;
   const { session } = req;
 
-  // Verificando se o usuário já está autenticado, se sim, ele é redirecionado à home
-  if (req.user.isAuthenticated) {
-    return res.status(400).redirect('/');
-  }
   if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(400).render('cadastro', { message });
   }
   const [userExist] = await db('users').where({ username }).select('username');
 
-  // Verificando se esse nome de usuário já está em uso
+  // Verificando se o nome de usuário já está em uso
   if (userExist) {
     const message = new Message(`O nome ${userExist.username} já está em uso`, 'error');
     return res.status(400).render('cadastro', { message });
@@ -39,10 +31,6 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
 });
 
 const getPaginaLogin = asyncWrapper(async (req, res) => {
-  // Verificando se o usuário já está autenticado, se sim, ele é redirecionado à home
-  if (req.user.isAuthenticated) {
-    return res.status(400).redirect('/');
-  }
   res.status(200).render('login');
 });
 
@@ -50,10 +38,6 @@ const logarUsuario = asyncWrapper(async (req, res) => {
   const { username, password } = req.body;
   const { session } = req;
 
-  // Verificando se o usuário já está autenticado, se sim, ele é redirecionado à home
-  if (req.user.isAuthenticated) {
-    return res.status(400).redirect('/');
-  }
   if (!username || !password || username.length === 0 || password.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(400).render('login', { message });
@@ -78,9 +62,15 @@ const logarUsuario = asyncWrapper(async (req, res) => {
   res.status(200).redirect('/');
 });
 
+const deslogarUsuario = asyncWrapper(async (req, res) => {
+  req.session.destroy();
+  res.status(200).redirect('/');
+});
+
 module.exports = {
   getPaginaCadastro,
   cadastrarUsuario,
   getPaginaLogin,
   logarUsuario,
+  deslogarUsuario,
 };

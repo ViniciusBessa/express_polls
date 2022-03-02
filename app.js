@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const nunjucks = require('nunjucks');
 
+// Session storage
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
 const db = require('./db/db');

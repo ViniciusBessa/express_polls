@@ -18,7 +18,13 @@
       <li>
         <a class="navbar__link" href="/conta/login">Entrar</a>
       </li>
-    {% endif %}
     </ul>
+    {% else %}
+    <ul class="navbar__menu">
+      <li>
+        <a class="navbar__link" href="/conta/logout">Sair</a>
+      </li>
+    </ul>
+    {% endif %}
   </div>
 </nav>
