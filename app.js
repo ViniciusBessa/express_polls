@@ -12,6 +12,7 @@ const app = express();
 const mainRoute = require('./routes/main');
 const userRoute = require('./routes/user');
 
+const authMiddleware = require('./middlewares/authentication');
 const notFound = require('./middlewares/not-found');
 const errorHandler = require('./middlewares/error-handler');
 
@@ -32,11 +33,12 @@ nunjucks.configure('views', {
 app.set('view engine', 'njk');
 
 // Session configuration
+const fiftenDays = 1000 * 60 * 60 * 24 * 15;
 const sess = {
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: {},
+  cookie: { maxAge: fiftenDays },
   store,
 };
 
@@ -45,6 +47,7 @@ if (process.env.ENVIRONMENT === 'production') {
 }
 
 app.use(session(sess));
+app.use(authMiddleware);
 
 // Routes
 app.use('/', mainRoute);
