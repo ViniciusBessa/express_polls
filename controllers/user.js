@@ -1,7 +1,7 @@
 const asyncWrapper = require('../middlewares/async-wrapper');
 const Message = require('../middlewares/message');
 const db = require('../db/db');
-const crypto = require('crypto');
+const { randomBytes, scryptSync, timingSafeEqual} = require('crypto');
 
 const getPaginaCadastro = asyncWrapper(async (req, res) => {
   res.status(200).render('cadastro');
@@ -22,8 +22,8 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
     const message = new Message(`O nome ${userExist.username} já está em uso`, 'error');
     return res.status(400).render('cadastro', { message });
   }
-  const salt = crypto.randomBytes(16).toString('hex');
-  let hashedPassword = crypto.scryptSync(password, salt, 64).toString('hex');
+  const salt = randomBytes(16).toString('hex');
+  let hashedPassword = scryptSync(password, salt, 64).toString('hex');
   hashedPassword = `${hashedPassword}:${salt}`;
   const [userData] = await db('users').insert({ username, password: hashedPassword, email }).returning('id');
   session.userID = userData.id;
@@ -49,9 +49,9 @@ const logarUsuario = asyncWrapper(async (req, res) => {
     return res.status(400).render('login', { message });
   }
   const [userKey, salt] = userData.password.split(':');
-  const hashedBuffer = crypto.scryptSync(password, salt, 64);
+  const hashedBuffer = scryptSync(password, salt, 64);
   const hashedKey = Buffer.from(userKey, 'hex');
-  const passwordMatch = crypto.timingSafeEqual(hashedBuffer, hashedKey);
+  const passwordMatch = timingSafeEqual(hashedBuffer, hashedKey);
 
   // Verificando se a senha digitada pelo usuário é a mesma que está no banco de dados
   if (!passwordMatch) {

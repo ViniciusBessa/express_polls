@@ -4,7 +4,7 @@ const authMiddleware = async (req, res, next) => {
   const { session } = req;
 
   if (!session.userID) {
-    req.user = {};
+    req.user = { username: 'anonymous', isAuthenticated: false };
     return next();
   }
 
