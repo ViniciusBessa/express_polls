@@ -10,8 +10,9 @@ const store = new KnexSessionStore({ knex: db });
 
 const app = express();
 
-const mainRoute = require('./routes/main');
-const userRoute = require('./routes/user');
+const mainRouter = require('./routes/main');
+const userRouter = require('./routes/user');
+const pollsRouter = require('./routes/polls');
 
 const authMiddleware = require('./middlewares/authentication');
 const notFound = require('./middlewares/not-found');
@@ -51,8 +52,9 @@ app.use(session(sess));
 app.use(authMiddleware);
 
 // Routes
-app.use('/', mainRoute);
-app.use('/conta', userRoute);
+app.use('/', mainRouter);
+app.use('/conta', userRouter);
+app.use('/polls', pollsRouter);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -15,17 +15,22 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(400).render('cadastro', { message });
   }
+  // Buscando por usuários que já possuam o mesmo nome ou e-mail
   const [userExist] = await db('users').where({ username }).select('username');
+  const [emailInUse] = await db('users').where({ email }).select('email');
 
-  // Verificando se o nome de usuário já está em uso
+  // Verificando se o nome de usuário ou o e-mail já estão em uso
   if (userExist) {
     const message = new Message(`O nome ${userExist.username} já está em uso`, 'error');
     return res.status(400).render('cadastro', { message });
+  } else if (emailInUse) {
+    const message = new Message(`O e-mail ${emailInUse.email} já está em uso`, 'error');
+    return res.status(400).render('cadastro', { message });
   }
+  // Criptografando a senha do usuário e o registrando no banco de dados
   const salt = randomBytes(16).toString('hex');
   let hashedPassword = scryptSync(password, salt, 64).toString('hex');
-  hashedPassword = `${hashedPassword}:${salt}`;
-  const [userData] = await db('users').insert({ username, password: hashedPassword, email }).returning('id');
+  const [userData] = await db('users').insert({ username, password: hashedPassword, email, salt }).returning('id');
   session.userID = userData.id;
   res.status(201).redirect('/');
 });
@@ -42,13 +47,14 @@ const logarUsuario = asyncWrapper(async (req, res) => {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(400).render('login', { message });
   }
-  let [userData] = await db('users').where({ username }).select('id', 'password');
+  let [userData] = await db('users').where({ username }).select('id', 'password', 'salt');
 
   if (!userData) {
     const message = new Message('Usuário não encontrado', 'error');
     return res.status(400).render('login', { message });
   }
-  const [userKey, salt] = userData.password.split(':');
+  // Retirando a senha criptografada e o salt utilizado
+  const { password: userKey, salt } = userData;
   const hashedBuffer = scryptSync(password, salt, 64);
   const hashedKey = Buffer.from(userKey, 'hex');
   const passwordMatch = timingSafeEqual(hashedBuffer, hashedKey);
