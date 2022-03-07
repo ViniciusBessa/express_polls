@@ -13,7 +13,6 @@ choicesDiv.addEventListener('input', (event) => {
     newInput.type = 'text';
     newInput.placeholder = 'Digite uma opção';
     newInput.maxLength = 100;
-    newInput.required = true;
 
     // Adicionando o novo node ao choicesDiv
     choicesDiv.appendChild(newInput);
