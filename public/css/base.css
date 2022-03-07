@@ -13,13 +13,13 @@ body {
 }
 
 .theme-dark {
-  --primary-color: #3ADA70;
+  --primary-color: #80dbb1;
   --secondary-color: #393939;
   --font-color: #ffffff;
 }
 
 .theme-light {
-  --primary-color: #3ADA70;
+  --primary-color: #80dbb1;
   --secondary-color: #f7f7f7;
   --font-color: #000000;
 }
@@ -53,7 +53,7 @@ body {
 }
 
 .alert--success {
-  background-color: var(--primary-color);
+  background-color: #3ADA70;
   border: 1px solid #228845;
 }
 
