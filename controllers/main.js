@@ -14,7 +14,7 @@ const createPoll = asyncWrapper(async (req, res) => {
     const message = new Message('Preencha o título da votação e coloque suas opções', 'error');
     return res.status(400).render('index', { message });
   }
-  const [poll] = await db('polls').insert({ title, owner: user.username }).returning('id');
+  const [poll] = await db('polls').insert({ title, id_user: user.id }).returning('id');
   session.lastPollID = poll.id;
   choices.forEach(async (choice) => {
     await db('poll_choices').insert({ id_poll: poll.id, description: choice });
