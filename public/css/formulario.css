@@ -22,6 +22,11 @@
   margin-bottom: 15px;
 }
 
+.form__input--title {
+  font-size: 1.2em;
+  margin-bottom: 30px;
+}
+
 @media only screen and (max-width: 600px) {
   .form {
     width: 90%;
