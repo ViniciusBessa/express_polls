@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const { getPoll } = require('../controllers/polls');
+const { getPoll, updatePollVotes } = require('../controllers/polls');
 
-router.route('/:id').get(getPoll);
+router.route('/:id').get(getPoll).patch(updatePollVotes);
 
 module.exports = router;

@@ -1,11 +1,22 @@
 {% extends "base.njk" %}
 
 {% block head %}
+  <link rel="stylesheet" href="/css/poll.css"/>
 {% endblock %}
 
 {% block main %}
-  <form>
+  <form class="poll-form">
+    <h1>{{ poll.title }}</h1>
     {% for choice in choices %}
+      <div class="poll-choice">
+        <input value="{{ choice.id }}" name="choice" type="radio"/>
+        <label for="choice">{{ choice.description }}</label>
+      </div>
     {% endfor %}
+    <button id="submit-button" type="submit">Enviar voto</button>
   </form>
+{% endblock %}
+
+{% block footer %}
+  <script src="/script/choiceHandler.js"></script>
 {% endblock %}

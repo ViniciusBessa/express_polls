@@ -8,10 +8,11 @@ const getHome = asyncWrapper(async (req, res) => {
 
 const createPoll = asyncWrapper(async (req, res) => {
   const { session, user } = req;
-  const [title, ...choices] = Object.values(req.body);
+  let [title, ...choices] = Object.values(req.body);
+  choices = choices.filter((choice) => choice.trim().length > 0);
 
-  if (!title || choices.length === 0) {
-    const message = new Message('Preencha o título da votação e coloque suas opções', 'error');
+  if (!title || choices.length <= 1) {
+    const message = new Message('Preencha o título da votação e coloque no mínimo duas opções', 'error');
     return res.status(400).render('index', { message });
   }
   const [poll] = await db('polls').insert({ title, id_user: user.id }).returning('id');
@@ -19,7 +20,7 @@ const createPoll = asyncWrapper(async (req, res) => {
   choices.forEach(async (choice) => {
     await db('poll_choices').insert({ id_poll: poll.id, description: choice });
   });
-  res.status(201).redirect('/');
+  res.status(201).redirect(`/polls/${poll.id}`);
 });
 
 module.exports = {
