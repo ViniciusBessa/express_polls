@@ -9,9 +9,10 @@ const getHome = asyncWrapper(async (req, res) => {
 const createPoll = asyncWrapper(async (req, res) => {
   const { session, user } = req;
   let [title, ...choices] = Object.values(req.body);
+  title = title.trim();
   choices = choices.filter((choice) => choice.trim().length > 0);
 
-  if (!title || choices.length <= 1) {
+  if (!title || title.length === 0 || choices.length <= 1) {
     const message = new Message('Preencha o título da votação e coloque no mínimo duas opções', 'error');
     return res.status(400).render('index', { message });
   }

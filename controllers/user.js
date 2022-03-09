@@ -1,15 +1,18 @@
 const asyncWrapper = require('../middlewares/async-wrapper');
 const Message = require('../middlewares/message');
 const db = require('../db/db');
-const { randomBytes, scryptSync, timingSafeEqual} = require('crypto');
+const { randomBytes, scryptSync, timingSafeEqual } = require('crypto');
 
 const getPaginaCadastro = asyncWrapper(async (req, res) => {
   res.status(200).render('cadastro');
 });
 
 const cadastrarUsuario = asyncWrapper(async (req, res) => {
-  const { username, password, email } = req.body;
+  let { username, password, email } = req.body;
   const { session } = req;
+  username = username.trim();
+  password = password.trim();
+  email = email.trim();
 
   if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
@@ -51,7 +54,7 @@ const logarUsuario = asyncWrapper(async (req, res) => {
 
   if (!userData) {
     const message = new Message('Usuário não encontrado', 'error');
-    return res.status(400).render('login', { message });
+    return res.status(404).render('login', { message });
   }
   // Retirando a senha criptografada e o salt utilizado
   const { password: userKey, salt } = userData;

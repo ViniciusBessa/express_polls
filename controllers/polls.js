@@ -7,6 +7,7 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const { id } = req.params;
   const [poll] = await db('polls').where({ id });
 
+  // Repassando o request para a página de erro 404
   if (!poll) {
     return next();
   }
@@ -24,9 +25,9 @@ const updatePollVotes = asyncWrapper(async (req, res) => {
 
   if (!choice) {
     const message = new Message('Opção inválida', 'error');
-    return res.status(400).json({ message });
+    return res.status(404).json({ message });
   }
-  res.status(201).json({ choice });
+  res.status(200).json({ choice });
 });
 
 module.exports = {
