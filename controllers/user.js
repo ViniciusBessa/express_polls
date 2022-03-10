@@ -43,8 +43,10 @@ const getPaginaLogin = asyncWrapper(async (req, res) => {
 });
 
 const logarUsuario = asyncWrapper(async (req, res) => {
-  const { username, password } = req.body;
+  let { username, password } = req.body;
   const { session } = req;
+  username = username.trim();
+  password = password.trim();
 
   if (!username || !password || username.length === 0 || password.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');

@@ -34,7 +34,7 @@
 
 .navbar__link {
   text-decoration: none;
-  color: inherit;
+  color: var(--font-color);
 }
 
 .navbar__link:hover {
