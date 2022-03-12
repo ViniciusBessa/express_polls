@@ -10,10 +10,18 @@
     {% for choice in choices %}
       <div class="poll-choice">
         <input value="{{ choice.id }}" name="choice" type="radio"/>
-        <label for="choice">{{ choice.description }}</label>
+        <div class="choice">
+          <div class="choice__description">{{ choice.description }}</div>
+          <div class="choice__progress-bar" style="width: {{ choice.number_of_votes / totalVotes * 100 }}%;"></div>
+        </div>
+        {% if totalVotes and choice.number_of_votes %}
+          <span>{{ (choice.number_of_votes / totalVotes * 100) | round }}%</span>
+        {% else %}
+          <span>0%</span>
+        {% endif %}
       </div>
     {% endfor %}
-    <button id="submit-button" type="submit">Enviar voto</button>
+    <button id="submit-button" type="submit">Votar</button>
   </form>
 {% endblock %}
 

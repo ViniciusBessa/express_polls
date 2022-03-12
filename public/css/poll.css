@@ -8,6 +8,34 @@
 
 .poll-choice {
   display: flex;
+  gap: 5px;
   margin-bottom: 15px;
   word-wrap: break-word;
+}
+
+.choice {
+  position: relative;
+  width: 85%;
+  word-wrap: break-word;
+}
+
+.choice__description {
+  width: 100%;
+  text-align: center;
+}
+
+.choice__progress-bar {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: -1;
+  display: inline;
+  background-color: red;
+  height: 100%;
+}
+
+@media only screen and (max-width: 600px) {
+  .poll-form {
+    width: 90%;
+  }
 }
