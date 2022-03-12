@@ -8,7 +8,7 @@
   <form class="poll-form">
     <h1>{{ poll.title }}</h1>
     {% for choice in choices %}
-      <div class="poll-choice">
+      <div class="poll-container">
         <input value="{{ choice.id }}" name="choice" type="radio"/>
         <div class="choice">
           <div class="choice__description">{{ choice.description }}</div>

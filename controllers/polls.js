@@ -15,22 +15,8 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const userIsOwner = user.id === poll.id_user && user.lastPollID === poll.id;
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
   let totalVotes = 0;
-  choices.forEach((choice) => totalVotes += choice.number_of_votes);
+  choices.forEach((choice) => (totalVotes += choice.number_of_votes));
   res.status(200).render('poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
-});
-
-const updatePollVotes = asyncWrapper(async (req, res) => {
-  const { id } = req.params;
-  const { choice: choiceID } = req.body;
-  const [choice] = await db('poll_choices')
-    .where({ id: choiceID, id_poll: id })
-    .update({ number_of_votes: db.raw('number_of_votes + 1') }, ['number_of_votes']);
-
-  if (!choice) {
-    const message = new Message('Opção inválida', 'error');
-    return res.status(404).json({ success: false, message });
-  }
-  res.status(200).json({ success: true, choice });
 });
 
 const endPoll = asyncWrapper(async (req, res) => {
@@ -41,14 +27,34 @@ const endPoll = asyncWrapper(async (req, res) => {
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {
-    res.status(403).json({ success: false });
+    return res.status(403).json({ success: false });
   }
   await db('polls').where({ poll }).update({ is_active: false });
   res.status(200).json({ success: true });
 });
 
+const getChoices = asyncWrapper(async (req, res) => {
+  const { id } = req.params;
+  const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
+  res.status(200).json({ choices });
+});
+
+const updateChoice = asyncWrapper(async (req, res) => {
+  const { pollID, choiceID } = req.params;
+  const [choice] = await db('poll_choices')
+    .where({ id: choiceID, id_poll: pollID })
+    .update({ number_of_votes: db.raw('number_of_votes + 1') }, ['number_of_votes']);
+
+  if (!choice) {
+    const message = new Message('Opção inválida', 'error');
+    return res.status(404).json({ success: false, message });
+  }
+  res.status(200).json({ success: true, choice });
+});
+
 module.exports = {
   getPoll,
-  updatePollVotes,
   endPoll,
+  getChoices,
+  updateChoice,
 };
