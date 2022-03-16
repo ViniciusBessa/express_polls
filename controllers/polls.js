@@ -12,7 +12,7 @@ const getPoll = asyncWrapper(async (req, res, next) => {
     return next();
   }
   const pollIsActive = poll.is_active;
-  const userIsOwner = user.id === poll.id_user && user.lastPollID === poll.id;
+  const userIsOwner = user.id === Number(poll.id_user) && user.lastPollID === Number(poll.id);
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
   let totalVotes = 0;
   choices.forEach((choice) => (totalVotes += choice.number_of_votes));
@@ -23,13 +23,19 @@ const endPoll = asyncWrapper(async (req, res) => {
   const { user } = req;
   const { id } = req.params;
   const [poll] = await db('polls').where({ id });
-  const userIsOwner = user.id === poll.id_user && user.lastPollID === poll.id;
+  const userIsOwner = user.id === Number(poll.id_user) && user.lastPollID === Number(poll.id);
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {
-    return res.status(403).json({ success: false });
+    const message = new Message('Apenas o dono da votação pode encerrá-la', 'error');
+    return res.status(403).json({ success: false, message });
+  } 
+  // Caso a votação não exista ou esteja encerrada
+  else if (!poll || !poll.is_active) {
+    const message = new Message('Votação não encontrada ou encerrada', 'error');
+    return res.status(404).json({ success: false, message });
   }
-  await db('polls').where({ poll }).update({ is_active: false });
+  await db('polls').where(poll).update({ is_active: false });
   res.status(200).json({ success: true });
 });
 

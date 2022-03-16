@@ -1,4 +1,4 @@
-.poll-form {
+.poll {
   width: 500px;
   margin: 50px auto;
   border: 1px solid var(--primary-color);
@@ -6,7 +6,12 @@
   padding: 20px;
 }
 
-.poll-container {
+.poll__alert {
+  width: fit-content;
+  margin: auto;
+}
+
+.poll__container {
   display: flex;
   gap: 5px;
   margin-bottom: 15px;
@@ -35,7 +40,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .poll-form {
+  .poll {
     width: 90%;
   }
 }

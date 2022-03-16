@@ -5,6 +5,6 @@ const { getPoll, updateChoice, getChoices, endPoll } = require('../controllers/p
 
 router.route('/:id').get(getPoll).patch(endPoll);
 router.route('/:id/choices').get(getChoices);
-router.route('/:pollID/choices/:choiceID').patch(updateChoice)
+router.route('/:pollID/choices/:choiceID').patch(updateChoice);
 
 module.exports = router;

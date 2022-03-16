@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block main %}
-  <form class="poll-form">
+  <form class="poll">
     <h1>{{ poll.title }}</h1>
     {% for choice in choices %}
-      <div class="poll-container">
+      <div class="poll__container">
         <input value="{{ choice.id }}" name="choice" type="radio"/>
         <div class="choice">
           <div class="choice__description">{{ choice.description }}</div>
@@ -22,9 +22,13 @@
       </div>
     {% endfor %}
     <button id="submit-button" type="submit">Votar</button>
+    {% if userIsOwner %}
+      <button id="end-poll-button" type="button">Terminar votação</button>
+    {% endif %}
   </form>
+  <div class="poll__alert"></div>
 {% endblock %}
 
 {% block footer %}
-  <script src="/script/choiceHandler.js"></script>
+  <script src="/script/pollHandler.js"></script>
 {% endblock %}

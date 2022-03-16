@@ -53,16 +53,16 @@ body {
 }
 
 .alert--success {
-  background-color: #3ADA70;
+  background-color: #3ada70;
   border: 1px solid #228845;
 }
 
 .alert--warning {
-  background-color: #F2CF18;
-  border: 1px solid #C1A616;
+  background-color: #f2cf18;
+  border: 1px solid #c1a616;
 }
 
 .alert--error {
-  background-color: #F54C41;
-  border: 1px solid #C94239;
+  background-color: #f54c41;
+  border: 1px solid #c94239;
 }

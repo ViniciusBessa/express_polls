@@ -1,16 +1,28 @@
-const pollForm = document.querySelector('.poll-form');
-const choicesDOM = Array.from(document.getElementsByClassName('poll-container'));
+const pollForm = document.querySelector('.poll');
+const choicesDOM = Array.from(document.getElementsByClassName('poll__container'));
+const endPollButton = document.getElementById('end-poll-button');
+const pollAlert = document.querySelector('.poll__alert');
 
 pollForm.addEventListener('submit', async (event) => {
   event.preventDefault();
   const formData = Object.fromEntries(new FormData(pollForm).entries());
   const url = window.location.href + '/choices' + `/${formData.choice}`;
-  const data = await fetch(url, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-  });
+
+  try {
+    let data = await fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    });
+    data = await data.json();
+
+    if (!data.ok) {
+      throw data.message.text;
+    }
+  } catch (error) {
+    pollAlert.innerText = error;
+  }
 });
 
 async function getUpdatedChoices() {
@@ -35,4 +47,21 @@ async function getUpdatedChoices() {
   }
 }
 
+// Atualizando os dados da votação a cada 10 segundos
 setInterval(() => getUpdatedChoices(), 10000);
+
+endPollButton.addEventListener('click', async () => {
+  const url = window.location.href;
+  try {
+    let data = await fetch(url, { method: 'PATCH' });
+    data = await data.json();
+
+    if (data.ok) {
+      document.location.reload();
+    } else {
+      throw data.message.text;
+    }
+  } catch (error) {
+    pollAlert.innerText = error;
+  }
+});
