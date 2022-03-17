@@ -17,11 +17,12 @@ pollForm.addEventListener('submit', async (event) => {
     });
     data = await data.json();
 
-    if (!data.ok) {
+    if (!data.success) {
       throw data.message.text;
     }
   } catch (error) {
     pollAlert.innerText = error;
+    setTimeout(() => document.location.reload(), 5000);
   }
 });
 
@@ -38,12 +39,17 @@ async function getUpdatedChoices() {
   for (let index = 0; index < choices.length; index++) {
     const choice = choices[index];
     const choiceChildren = choicesDOM[index].children;
+    const choiceVotesPercentage = choiceChildren[2];
+    const choiceProgressBar = choiceChildren[1].children[1];
 
     // Atualizando a porcentagem de votos da escolha
-    const choiceVotesPercentage = choiceChildren[2];
-    choiceVotesPercentage.innerText = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
-    const choiceProgressBar = choiceChildren[1].children[1];
-    choiceProgressBar.style.width = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
+    if (totalVotes > 0) {
+      choiceVotesPercentage.innerText = Math.round((choice.number_of_votes / totalVotes) * 100) + '%'; 
+      choiceProgressBar.style.width = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
+    } else {
+      choiceVotesPercentage.innerText = '0%';
+      choiceProgressBar.style.width = '0%';
+    }
   }
 }
 
@@ -52,11 +58,12 @@ setInterval(() => getUpdatedChoices(), 10000);
 
 endPollButton.addEventListener('click', async () => {
   const url = window.location.href;
+
   try {
     let data = await fetch(url, { method: 'PATCH' });
     data = await data.json();
 
-    if (data.ok) {
+    if (data.success) {
       document.location.reload();
     } else {
       throw data.message.text;

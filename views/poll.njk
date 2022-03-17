@@ -9,7 +9,11 @@
     <h1>{{ poll.title }}</h1>
     {% for choice in choices %}
       <div class="poll__container">
-        <input value="{{ choice.id }}" name="choice" type="radio"/>
+        {% if poll.is_active %}
+          <input value="{{ choice.id }}" name="choice" type="radio"/>
+        {% else %}
+          <input value="{{ choice.id }}" disabled name="choice" type="radio"/>
+        {% endif %}
         <div class="choice">
           <div class="choice__description">{{ choice.description }}</div>
           <div class="choice__progress-bar" style="width: {{ choice.number_of_votes / totalVotes * 100 }}%;"></div>
@@ -21,8 +25,10 @@
         {% endif %}
       </div>
     {% endfor %}
-    <button id="submit-button" type="submit">Votar</button>
-    {% if userIsOwner %}
+    {% if poll.is_active %}
+      <button id="submit-button" type="submit">Votar</button>
+    {% endif %}
+    {% if userIsOwner and poll.is_active %}
       <button id="end-poll-button" type="button">Terminar votação</button>
     {% endif %}
   </form>
@@ -30,5 +36,7 @@
 {% endblock %}
 
 {% block footer %}
-  <script src="/script/pollHandler.js"></script>
+  {% if poll.is_active %}
+    <script src="/script/pollHandler.js"></script>
+  {% endif %}
 {% endblock %}

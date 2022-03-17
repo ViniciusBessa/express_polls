@@ -29,7 +29,7 @@ const endPoll = asyncWrapper(async (req, res) => {
   if (!userIsOwner) {
     const message = new Message('Apenas o dono da votação pode encerrá-la', 'error');
     return res.status(403).json({ success: false, message });
-  } 
+  }
   // Caso a votação não exista ou esteja encerrada
   else if (!poll || !poll.is_active) {
     const message = new Message('Votação não encontrada ou encerrada', 'error');
@@ -47,6 +47,12 @@ const getChoices = asyncWrapper(async (req, res) => {
 
 const updateChoice = asyncWrapper(async (req, res) => {
   const { pollID, choiceID } = req.params;
+  const [poll] = await db('polls').where({ id: pollID });
+
+  if (!poll || !poll.is_active) {
+    const message = new Message('A votação está finalizada', 'error');
+    return res.status(400).json({ success: false, message });
+  }
   const [choice] = await db('poll_choices')
     .where({ id: choiceID, id_poll: pollID })
     .update({ number_of_votes: db.raw('number_of_votes + 1') }, ['number_of_votes']);
