@@ -35,7 +35,7 @@ const endPoll = asyncWrapper(async (req, res) => {
     const message = new Message('Votação não encontrada ou encerrada', 'error');
     return res.status(404).json({ success: false, message });
   }
-  await db('polls').where(poll).update({ is_active: false });
+  await db('polls').where({ id }).update({ is_active: false });
   res.status(200).json({ success: true });
 });
 

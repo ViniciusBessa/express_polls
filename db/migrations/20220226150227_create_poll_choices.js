@@ -6,7 +6,7 @@ exports.up = function (knex) {
   return knex.schema.createTable('poll_choices', (table) => {
     table.increments('id').primary();
     table.bigInteger('id_poll').notNullable().references('id').inTable('polls').onDelete('CASCADE');
-    table.string('description', 100).notNullable();
+    table.string('description', 50).notNullable();
   });
 };
 
