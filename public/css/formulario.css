@@ -27,6 +27,18 @@
   margin-bottom: 30px;
 }
 
+.form__submit-button {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--font-color);
+  padding: 5px;
+}
+
+.form__submit-button:hover {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
 @media only screen and (max-width: 600px) {
   .form {
     width: 90%;
