@@ -7,7 +7,7 @@
       </li>
     </ul>
     <form class="navbar__busca" action="/polls/busca" method="GET">
-      <input class="busca__input" type="text" name="title" pattern=".*\S.*" placeholder="Digite o título de uma votação"/>
+      <input class="busca__input" type="text" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Digite o título de uma votação" maxlength="60"/>
       <button class="busca__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
     </form>
     {% if not req.user.isAuthenticated %}

@@ -6,11 +6,11 @@
 
 {% block main %}
   <form class="form" action="/" method="POST">
-    <input class="form__input form__input--title" name="title" type="text" placeholder="Título da votação" maxlength="50" required>
+    <input class="form__input form__input--title" type="text" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Título da votação" maxlength="60">
     <div id="choices">
-      <input class="form__input" name="choice-1" type="text" placeholder="Digite uma opção" maxlength="100"/>
-      <input class="form__input" name="choice-2" type="text" placeholder="Digite uma opção" maxlength="100"/>
-      <input class="form__input" name="choice-3" type="text" placeholder="Digite uma opção" maxlength="100"/>
+      <input class="form__input" name="choice-1" type="text" placeholder="Digite uma opção" maxlength="50"/>
+      <input class="form__input" name="choice-2" type="text" placeholder="Digite uma opção" maxlength="50"/>
+      <input class="form__input" name="choice-3" type="text" placeholder="Digite uma opção" maxlength="50"/>
     </div>
     <button class="form__submit-button" type="submit">Começar votação</button>
   </form>

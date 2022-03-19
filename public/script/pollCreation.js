@@ -12,7 +12,7 @@ choicesDiv.addEventListener('input', (event) => {
     newInput.name = `choice-${choicesCount + 1}`;
     newInput.type = 'text';
     newInput.placeholder = 'Digite uma opção';
-    newInput.maxLength = 100;
+    newInput.maxLength = 50;
 
     // Adicionando o novo node ao choicesDiv
     choicesDiv.appendChild(newInput);
