@@ -26,10 +26,10 @@
       </div>
     {% endfor %}
     {% if poll.is_active %}
-      <button id="submit-button" type="submit">Votar</button>
+      <button id="submit-button" class="poll__submit-button" type="submit">Votar</button>
     {% endif %}
     {% if userIsOwner and poll.is_active %}
-      <button id="end-poll-button" type="button">Terminar votação</button>
+      <button id="end-poll-button" class="poll__end-button" type="button">Terminar votação</button>
     {% endif %}
   </form>
   <div class="poll__alert"></div>

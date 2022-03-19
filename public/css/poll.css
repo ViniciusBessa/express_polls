@@ -18,6 +18,32 @@
   word-wrap: break-word;
 }
 
+.poll__submit-button {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 5px;
+}
+
+.poll__submit-button:hover {
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+.poll__end-button {
+  display: block;
+  background-color: transparent;
+  border: 1px solid red;
+  color: red;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.poll__end-button:hover {
+  background-color: red;
+  color: var(--font-color);
+}
+
 .choice {
   position: relative;
   width: 85%;

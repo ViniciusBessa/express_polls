@@ -30,7 +30,7 @@
 .form__submit-button {
   background-color: transparent;
   border: 1px solid var(--primary-color);
-  color: var(--font-color);
+  color: var(--primary-color);
   padding: 5px;
 }
 
