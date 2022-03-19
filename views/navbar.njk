@@ -8,23 +8,23 @@
     </ul>
     <form class="navbar__busca" action="/busca" method="GET">
       <input class="busca__input" type="text" name="busca" placeholder="Digite o título de uma votação"/>
-      <button type="submit">Entrar</button>
+      <button class="busca__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
     </form>
     {% if not req.user.isAuthenticated %}
-    <ul class="navbar__menu">
-      <li>
-        <a class="navbar__link" href="/conta/cadastro">Cadastrar</a>
-      </li>
-      <li>
-        <a class="navbar__link" href="/conta/login">Entrar</a>
-      </li>
-    </ul>
+      <ul class="navbar__menu">
+        <li>
+          <a class="navbar__link" href="/conta/cadastro">Cadastrar</a>
+        </li>
+        <li>
+          <a class="navbar__link" href="/conta/login">Entrar</a>
+        </li>
+      </ul>
     {% else %}
-    <ul class="navbar__menu">
-      <li>
-        <a class="navbar__link" href="/conta/logout">Sair</a>
-      </li>
-    </ul>
+      <ul class="navbar__menu">
+        <li>
+          <a class="navbar__link" href="/conta/logout">Sair</a>
+        </li>
+      </ul>
     {% endif %}
   </div>
 </nav>

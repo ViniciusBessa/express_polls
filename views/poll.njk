@@ -6,7 +6,7 @@
 
 {% block main %}
   <form class="poll">
-    <h1>{{ poll.title }}</h1>
+    <h1 class="poll__title">{{ poll.title }}</h1>
     {% for choice in choices %}
       <div class="poll__container">
         {% if poll.is_active %}

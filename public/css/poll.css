@@ -1,9 +1,14 @@
 .poll {
-  width: 500px;
+  width: 540px;
   margin: 50px auto;
   border: 1px solid var(--primary-color);
   border-radius: 10px;
   padding: 20px;
+}
+
+.poll__title {
+  text-align: center;
+  word-wrap: break-word;
 }
 
 .poll__alert {
