@@ -6,8 +6,8 @@
         <a class="navbar__link" href="/">Início</a>
       </li>
     </ul>
-    <form class="navbar__busca" action="/busca" method="GET">
-      <input class="busca__input" type="text" name="busca" placeholder="Digite o título de uma votação"/>
+    <form class="navbar__busca" action="/polls/busca" method="GET">
+      <input class="busca__input" type="search" name="title" pattern=".*\S.*" required placeholder="Digite o título de uma votação"/>
       <button type="submit">Entrar</button>
     </form>
     {% if not req.user.isAuthenticated %}

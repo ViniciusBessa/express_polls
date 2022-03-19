@@ -39,6 +39,21 @@ const endPoll = asyncWrapper(async (req, res) => {
   res.status(200).json({ success: true });
 });
 
+const searchPolls = asyncWrapper(async (req, res) => {
+  let { title } = req.query;
+  title = title.trim();
+
+  // Caso o título digitado pelo usuário esteja vazio
+  if (!title) {
+    return res.status(400).redirect('/');
+  }
+  const polls = await db('polls')
+    .innerJoin('users', 'polls.id_user', 'users.id')
+    .whereILike('title', `%${title}%`)
+    .select('polls.*', 'users.username');
+  res.status(200).render('busca', { req, polls, title });
+});
+
 const getChoices = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
@@ -67,6 +82,7 @@ const updateChoice = asyncWrapper(async (req, res) => {
 module.exports = {
   getPoll,
   endPoll,
+  searchPolls,
   getChoices,
   updateChoice,
 };

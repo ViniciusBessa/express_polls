@@ -1,0 +1,29 @@
+.container-results {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  padding: 10px;
+}
+
+.result {
+  width: 300px;
+  border: 1px solid var(--primary-color);
+  padding: 5px 10px 5px 10px;
+  margin: 15px 0px;
+}
+
+.result__owner {
+  text-align: left;
+  color: #bdbcbc;
+}
+
+.result__title {
+  text-align: center;
+  word-wrap: break-word;
+}
+
+.result__link {
+  display: block;
+  text-align: center;
+  color: var(--primary-color);
+}

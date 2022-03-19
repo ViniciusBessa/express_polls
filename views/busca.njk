@@ -1,0 +1,23 @@
+{% extends "base.njk" %}
+
+{% block head %}
+  <link rel="stylesheet" href="/css/busca.css"/>
+{% endblock %}
+
+{% block main %}
+  {% if polls.length > 0 %}
+    <section class="container-results">
+      {% for poll in polls %}
+        <div class="result">
+          <p class="result__owner">{{poll.username}}</p>
+          <h2 class="result__title">{{poll.title}}</h2>
+          <a class="result__link" href="/polls/{{poll.id}}">Clique para ver a votação</a>
+        </div>
+      {% endfor %}
+    </section>
+  {% else %}
+    <section class="container-results">
+      <h1>Nenhuma votação foi encontrada com o título "{{title}}"</h1>
+    </section>
+  {% endif %}
+{% endblock %}
