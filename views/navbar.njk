@@ -5,24 +5,29 @@
       <li>
         <a class="navbar__link" href="/">Início</a>
       </li>
+      {% if req.user.isAuthenticated %}
+        <li>
+          <a class="navbar__link" href="/conta/polls">Minhas votações</a>
+        </li>
+      {% endif %}
     </ul>
     <form class="navbar__busca" action="/polls/busca" method="GET">
       <input class="busca__input" type="text" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Digite o título de uma votação" maxlength="60"/>
       <button class="busca__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
     </form>
-    {% if not req.user.isAuthenticated %}
+    {% if req.user.isAuthenticated %}
+      <ul class="navbar__menu">
+        <li>
+          <a class="navbar__link" href="/conta/logout">Sair</a>
+        </li>
+      </ul>
+    {% else %}
       <ul class="navbar__menu">
         <li>
           <a class="navbar__link" href="/conta/cadastro">Cadastrar</a>
         </li>
         <li>
           <a class="navbar__link" href="/conta/login">Entrar</a>
-        </li>
-      </ul>
-    {% else %}
-      <ul class="navbar__menu">
-        <li>
-          <a class="navbar__link" href="/conta/logout">Sair</a>
         </li>
       </ul>
     {% endif %}

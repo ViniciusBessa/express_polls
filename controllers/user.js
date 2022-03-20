@@ -10,7 +10,7 @@ const getPaginaCadastro = asyncWrapper(async (req, res) => {
 const cadastrarUsuario = asyncWrapper(async (req, res) => {
   let { username, password, email } = req.body;
   const { session } = req;
-  username = username.trim().toUpperCase();
+  username = username.trim();
   password = password.trim();
   email = email.trim();
 
@@ -78,10 +78,17 @@ const deslogarUsuario = asyncWrapper(async (req, res) => {
   res.status(200).redirect('/');
 });
 
+const getUserPolls = asyncWrapper(async (req, res) => {
+  const { user } = req;
+  const polls = await db('polls').where({ id_user: user.id });
+  res.status(200).render('user/userPolls', { req, polls });
+});
+
 module.exports = {
   getPaginaCadastro,
   cadastrarUsuario,
   getPaginaLogin,
   logarUsuario,
   deslogarUsuario,
+  getUserPolls,
 };

@@ -1,0 +1,23 @@
+.polls {
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+  padding: 10px;
+}
+
+.poll {
+  border: 1px solid var(--primary-color);
+  padding: 20px;
+  width: 300px;
+  margin: 15px 0px;
+}
+
+.poll__title {
+  text-align: center;
+}
+
+.poll__link {
+  display: block;
+  color: var(--primary-color);
+  text-align: center;
+}

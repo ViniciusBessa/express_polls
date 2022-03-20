@@ -1,0 +1,22 @@
+{% extends "base.njk" %}
+
+{% block head %}
+  <link rel="stylesheet" href="/css/userPolls.css"/>
+{% endblock %}
+
+{% block main %}
+  {% if polls.length > 0 %}
+    <section class="polls">
+      {% for poll in polls %}
+        <div class="poll">
+          <h2 class="poll__title">{{poll.title}}</h2>
+          <a class="poll__link" href="/polls/{{poll.id}}">Clique para ver a votação</a>
+        </div>
+      {% endfor %}
+    </section>
+  {% else %}
+    <section class="polls">
+      <h1>Nenhuma votação foi encontrada</h1>
+    </section>
+  {% endif %}
+{% endblock %}
