@@ -10,7 +10,7 @@ const getPaginaCadastro = asyncWrapper(async (req, res) => {
 const cadastrarUsuario = asyncWrapper(async (req, res) => {
   let { username, password, email } = req.body;
   const { session } = req;
-  username = username.trim();
+  username = username.trim().toUpperCase();
   password = password.trim();
   email = email.trim();
 
@@ -19,7 +19,7 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
     return res.status(400).render('cadastro', { message });
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
-  const [userExist] = await db('users').where({ username }).select('username');
+  const [userExist] = await db('users').whereILike('username', `%${username}%`).select('username');
   const [emailInUse] = await db('users').where({ email }).select('email');
 
   // Verificando se o nome de usuário ou o e-mail já estão em uso
@@ -52,7 +52,7 @@ const logarUsuario = asyncWrapper(async (req, res) => {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(400).render('login', { message });
   }
-  let [userData] = await db('users').where({ username }).select('id', 'password', 'salt');
+  let [userData] = await db('users').whereILike('username', `%${username}%`).select('id', 'password', 'salt');
 
   if (!userData) {
     const message = new Message('Usuário não encontrado', 'error');

@@ -15,6 +15,9 @@ const createPoll = asyncWrapper(async (req, res) => {
   if (!title || title.length === 0 || choices.length <= 1) {
     const message = new Message('Preencha o título da votação e coloque no mínimo duas opções', 'error');
     return res.status(400).render('index', { req, message });
+  } else if (title.length > 60) {
+    const message = new Message('O título só pode ter até 60 caracteres', 'error');
+    return res.status(400).render('index', { req, message });
   }
   const [poll] = await db('polls').insert({ title, id_user: user.id }).returning('id');
   session.lastPollID = poll.id;

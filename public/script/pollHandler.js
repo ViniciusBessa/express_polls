@@ -1,6 +1,7 @@
 const pollForm = document.querySelector('.poll');
 const choicesDOM = Array.from(document.getElementsByClassName('poll__container'));
 const endPollButton = document.getElementById('end-poll-button');
+const pollTotalVotes = document.getElementById('poll-total-votes');
 const pollAlert = document.querySelector('.poll__alert');
 
 pollForm.addEventListener('submit', async (event) => {
@@ -19,11 +20,13 @@ pollForm.addEventListener('submit', async (event) => {
 
     if (!data.success) {
       throw data.message.text;
+    } else {
+      pollAlert.innerText = 'Voto contado com sucesso!';
     }
   } catch (error) {
     pollAlert.innerText = error;
-    setTimeout(() => document.location.reload(), 5000);
   }
+  setTimeout(() => (pollAlert.innerText = ''), 5000);
 });
 
 async function getUpdatedChoices() {
@@ -35,6 +38,7 @@ async function getUpdatedChoices() {
   // Calculando o número total de votos
   let totalVotes = 0;
   choices.forEach((choice) => (totalVotes += choice.number_of_votes));
+  pollTotalVotes.innerText = `Total de votos: ${totalVotes}`;
 
   for (let index = 0; index < choices.length; index++) {
     const choice = choices[index];
@@ -44,7 +48,7 @@ async function getUpdatedChoices() {
 
     // Atualizando a porcentagem de votos da escolha
     if (totalVotes > 0) {
-      choiceVotesPercentage.innerText = Math.round((choice.number_of_votes / totalVotes) * 100) + '%'; 
+      choiceVotesPercentage.innerText = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
       choiceProgressBar.style.width = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
     } else {
       choiceVotesPercentage.innerText = '0%';

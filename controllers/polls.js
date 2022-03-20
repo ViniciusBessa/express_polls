@@ -12,7 +12,8 @@ const getPoll = asyncWrapper(async (req, res, next) => {
     return next();
   }
   const pollIsActive = poll.is_active;
-  const userIsOwner = user.id === Number(poll.id_user) && user.lastPollID === Number(poll.id);
+  const userIsOwner =
+    user.id === Number(poll.id_user) && (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
   let totalVotes = 0;
   choices.forEach((choice) => (totalVotes += choice.number_of_votes));
@@ -23,7 +24,8 @@ const endPoll = asyncWrapper(async (req, res) => {
   const { user } = req;
   const { id } = req.params;
   const [poll] = await db('polls').where({ id });
-  const userIsOwner = user.id === Number(poll.id_user) && user.lastPollID === Number(poll.id);
+  const userIsOwner =
+    user.id === Number(poll.id_user) && (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {

@@ -25,6 +25,7 @@
         {% endif %}
       </div>
     {% endfor %}
+    <p id="poll-total-votes">Total de votos: {{totalVotes}}</p>
     {% if poll.is_active %}
       <button id="submit-button" class="poll__submit-button" type="submit">Votar</button>
     {% endif %}
