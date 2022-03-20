@@ -4,7 +4,7 @@ const db = require('../db/db');
 const { randomBytes, scryptSync, timingSafeEqual } = require('crypto');
 
 const getPaginaCadastro = asyncWrapper(async (req, res) => {
-  res.status(200).render('cadastro');
+  res.status(200).render('user/cadastro');
 });
 
 const cadastrarUsuario = asyncWrapper(async (req, res) => {
@@ -16,7 +16,7 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
 
   if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
-    return res.status(400).render('cadastro', { message });
+    return res.status(400).render('user/cadastro', { message });
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
   const [userExist] = await db('users').whereILike('username', `%${username}%`).select('username');
@@ -25,10 +25,10 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
   // Verificando se o nome de usuário ou o e-mail já estão em uso
   if (userExist) {
     const message = new Message(`O nome ${userExist.username} já está em uso`, 'error');
-    return res.status(400).render('cadastro', { message });
+    return res.status(400).render('user/cadastro', { message });
   } else if (emailInUse) {
     const message = new Message(`O e-mail ${emailInUse.email} já está em uso`, 'error');
-    return res.status(400).render('cadastro', { message });
+    return res.status(400).render('user/cadastro', { message });
   }
   // Criptografando a senha do usuário e o registrando no banco de dados
   const salt = randomBytes(16).toString('hex');
@@ -39,7 +39,7 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
 });
 
 const getPaginaLogin = asyncWrapper(async (req, res) => {
-  res.status(200).render('login');
+  res.status(200).render('user/login');
 });
 
 const logarUsuario = asyncWrapper(async (req, res) => {
@@ -50,13 +50,13 @@ const logarUsuario = asyncWrapper(async (req, res) => {
 
   if (!username || !password || username.length === 0 || password.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
-    return res.status(400).render('login', { message });
+    return res.status(400).render('user/login', { message });
   }
   let [userData] = await db('users').whereILike('username', `%${username}%`).select('id', 'password', 'salt');
 
   if (!userData) {
     const message = new Message('Usuário não encontrado', 'error');
-    return res.status(404).render('login', { message });
+    return res.status(404).render('user/login', { message });
   }
   // Retirando a senha criptografada e o salt utilizado
   const { password: userKey, salt } = userData;
@@ -67,7 +67,7 @@ const logarUsuario = asyncWrapper(async (req, res) => {
   // Verificando se a senha digitada pelo usuário é a mesma que está no banco de dados
   if (!passwordMatch) {
     const message = new Message('Senha inserida está incorreta', 'error');
-    return res.status(400).render('login', { message });
+    return res.status(400).render('user/login', { message });
   }
   session.userID = userData.id;
   res.status(200).redirect('/');

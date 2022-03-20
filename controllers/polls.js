@@ -17,7 +17,7 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
   let totalVotes = 0;
   choices.forEach((choice) => (totalVotes += choice.number_of_votes));
-  res.status(200).render('poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
+  res.status(200).render('polls/poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
 });
 
 const endPoll = asyncWrapper(async (req, res) => {
@@ -53,7 +53,7 @@ const searchPolls = asyncWrapper(async (req, res) => {
     .innerJoin('users', 'polls.id_user', 'users.id')
     .whereILike('title', `%${title}%`)
     .select('polls.*', 'users.username');
-  res.status(200).render('busca', { req, polls, title });
+  res.status(200).render('polls/busca', { req, polls, title });
 });
 
 const getChoices = asyncWrapper(async (req, res) => {
