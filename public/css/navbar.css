@@ -9,7 +9,14 @@
 
 .navbar__toggler {
   display: none;
-  background-color: transparent;
+  width: 50px;
+  height: 38px;
+  background: repeating-linear-gradient(
+    var(--primary-color),
+    var(--primary-color) 8px,
+    transparent 8px,
+    transparent 15px
+  );
   border: none;
   padding: 0;
 }
@@ -73,20 +80,14 @@
     flex-direction: column;
   }
 
-  .navbar__container {
+  .navbar__container, .navbar__menu {
     flex-direction: column;
     place-items: start;
     gap: 10px;
   }
 
-  .navbar__menu {
-    flex-direction: column;
-    gap: 10px;
-  }
-
   .navbar__toggler {
     display: inline;
-    width: 50px;
   }
 
   .navbar__busca {
