@@ -13,19 +13,21 @@ body {
 }
 
 .theme-dark {
-  --primary-color: #80dbb1;
-  --secondary-color: #393939;
+  --primary-color: #6de490;
+  --secondary-color: #80dbb1;
+  --background-color: #393939;
   --font-color: #ffffff;
 }
 
 .theme-light {
-  --primary-color: #80dbb1;
-  --secondary-color: #f7f7f7;
+  --primary-color: #6de490;
+  --secondary-color: #80dbb1;
+  --background-color: #f4f4f4;
   --font-color: #000000;
 }
 
 .background {
-  background-color: var(--secondary-color);
+  background-color: var(--background-color);
 }
 
 .font-color {

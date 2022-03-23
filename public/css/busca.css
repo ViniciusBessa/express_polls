@@ -25,5 +25,9 @@
 .result__link {
   display: block;
   text-align: center;
-  color: var(--primary-color);
+  color: var(--secondary-color);
+}
+
+.result__link:hover {
+  text-decoration: none;
 }

@@ -66,7 +66,7 @@
 
 .busca__submit-button {
   height: 30px;
-  background-color: var(--primary-color);
+  background-color: var(--secondary-color);
   border: 1px solid transparent;
   border-radius: 0px 10px 10px 0px;
 }
