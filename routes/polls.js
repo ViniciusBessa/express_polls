@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const { getPoll, endPoll, searchPolls, getChoices, updateChoice } = require('../controllers/polls');
+const { getPoll, endPoll, createPoll, searchPolls, getChoices, updateChoice } = require('../controllers/polls');
 
+router.route('/').post(createPoll);
 router.route('/busca').get(searchPolls);
 router.route('/:id').get(getPoll).patch(endPoll);
 router.route('/:id/choices').get(getChoices);

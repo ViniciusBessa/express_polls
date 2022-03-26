@@ -20,6 +20,28 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   res.status(200).render('polls/poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
 });
 
+const createPoll = asyncWrapper(async (req, res) => {
+  const { session, user } = req;
+  let { title, choices } = req.body;
+  choices = Object.values(choices);
+  title = title.trim();
+  choices = choices.filter((choice) => choice.trim().length > 0);
+
+  if (!title || title.length === 0 || choices.length <= 1) {
+    const message = new Message('Preencha o título da votação e coloque no mínimo duas opções', 'error');
+    return res.status(400).json({ success: false, message });
+  } else if (title.length > 60) {
+    const message = new Message('O título só pode ter até 60 caracteres', 'error');
+    return res.status(400).json({ success: false, message });
+  }
+  const [poll] = await db('polls').insert({ title, id_user: user.id }).returning('id');
+  session.lastPollID = poll.id;
+  choices.forEach(async (choice) => {
+    await db('poll_choices').insert({ id_poll: poll.id, description: choice });
+  });
+  res.status(201).json({ success: true, pollID: poll.id });
+});
+
 const endPoll = asyncWrapper(async (req, res) => {
   const { user } = req;
   const { id } = req.params;
@@ -83,6 +105,7 @@ const updateChoice = asyncWrapper(async (req, res) => {
 
 module.exports = {
   getPoll,
+  createPoll,
   endPoll,
   searchPolls,
   getChoices,

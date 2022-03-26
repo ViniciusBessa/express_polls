@@ -1,5 +1,32 @@
+const formDOM = document.querySelector('.form');
+const pollAlert = document.querySelector('.poll__alert');
 const choicesDiv = document.getElementById('choices');
 let choicesCount = 3;
+
+formDOM.addEventListener('submit', async (event) => {
+  try {
+    event.preventDefault();
+    const { title, ...choices } = Object.fromEntries(new FormData(formDOM).entries());
+
+    let data = await fetch('/polls', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ title, choices }),
+    });
+    data = await data.json();
+
+    if (!data.success) {
+      pollAlert.innerText = data.message;
+    } else {
+      document.location.replace(`/polls/${data.pollID}`);
+    }
+  } catch (err) {
+    pollAlert.innerText = data.message;
+  }
+  setTimeout(() => (pollAlert.innerText = ''), 5000);
+});
 
 choicesDiv.addEventListener('input', (event) => {
   let lastInput = choicesDiv.children;

@@ -10,7 +10,8 @@ const store = new KnexSessionStore({ knex: db });
 
 const app = express();
 
-const mainRouter = require('./routes/main');
+// Routers
+const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user');
 const pollsRouter = require('./routes/polls');
 
@@ -52,7 +53,7 @@ app.use(session(sess));
 app.use(authMiddleware);
 
 // Routes
-app.use('/', mainRouter);
+app.use('/', indexRouter);
 app.use('/conta', userRouter);
 app.use('/polls', pollsRouter);
 
