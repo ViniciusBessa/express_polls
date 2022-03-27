@@ -1,5 +1,5 @@
 <nav class="navbar">
-  <button class="navbar__toggler"><img src="/images/toggler_icon.png" alt="Icone de um botão toggler" height="35px"/></button>
+  <button class="navbar__toggler"></button>
   <div class="navbar__container collapsed">
     <ul class="navbar__menu">
       <li>
@@ -12,7 +12,7 @@
       {% endif %}
     </ul>
     <form class="navbar__busca" action="/polls/busca" method="GET">
-      <input class="busca__input" type="text" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Digite o título de uma votação" maxlength="60"/>
+      <input class="busca__input" type="search" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Digite o título de uma votação" maxlength="60"/>
       <button class="busca__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
     </form>
     {% if req.user.isAuthenticated %}

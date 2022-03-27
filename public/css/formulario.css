@@ -7,7 +7,7 @@
 }
 
 .form__title {
-  border-bottom: 1px solid var(--primary-color);
+  border-bottom: 1px solid var(--secondary-color);
 }
 
 .form__input {
@@ -16,7 +16,7 @@
   border: none;
   background-color: transparent;
   color: inherit;
-  border-bottom: 1px solid var(--primary-color);
+  border-bottom: 1px solid var(--secondary-color);
   outline: none;
   font-size: 1em;
   margin-bottom: 15px;
@@ -36,7 +36,7 @@
 
 .form__submit-button:hover {
   background-color: var(--primary-color);
-  color: var(--secondary-color);
+  color: var(--background-color);
 }
 
 @media only screen and (max-width: 600px) {
