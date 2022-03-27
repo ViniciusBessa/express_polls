@@ -1,5 +1,5 @@
 const formDOM = document.querySelector('.form');
-const pollAlert = document.querySelector('.poll__alert');
+const formAlert = document.querySelector('.form__alert');
 const choicesDiv = document.getElementById('choices');
 let choicesCount = 3;
 
@@ -18,14 +18,14 @@ formDOM.addEventListener('submit', async (event) => {
     data = await data.json();
 
     if (!data.success) {
-      pollAlert.innerText = data.message;
+      formAlert.innerText = data.message;
     } else {
       document.location.replace(`/polls/${data.pollID}`);
     }
   } catch (err) {
-    pollAlert.innerText = data.message;
+    formAlert.innerText = data.message;
   }
-  setTimeout(() => (pollAlert.innerText = ''), 5000);
+  setTimeout(() => (formAlert.innerText = ''), 5000);
 });
 
 choicesDiv.addEventListener('input', (event) => {

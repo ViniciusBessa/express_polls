@@ -10,6 +10,11 @@
   border-bottom: 1px solid var(--secondary-color);
 }
 
+.form__alert {
+  width: fit-content;
+  margin: auto;
+}
+
 .form__input {
   display: block;
   width: 100%;
