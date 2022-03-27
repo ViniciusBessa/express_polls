@@ -1,5 +1,6 @@
 const asyncWrapper = require('../middlewares/async-wrapper');
-const Message = require('../middlewares/message');
+const { StatusCodes } = require('http-status-codes');
+const { BadRequestError, ForbiddenError, NotFoundError } = require('../errors');
 const db = require('../db/db');
 
 const getPoll = asyncWrapper(async (req, res, next) => {
@@ -17,7 +18,7 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
   let totalVotes = 0;
   choices.forEach((choice) => (totalVotes += choice.number_of_votes));
-  res.status(200).render('polls/poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
+  res.status(StatusCodes.OK).render('polls/poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
 });
 
 const createPoll = asyncWrapper(async (req, res) => {
@@ -28,18 +29,16 @@ const createPoll = asyncWrapper(async (req, res) => {
   choices = choices.filter((choice) => choice.trim().length > 0);
 
   if (!title || title.length === 0 || choices.length <= 1) {
-    const message = new Message('Preencha o título da votação e coloque no mínimo duas opções', 'error');
-    return res.status(400).json({ success: false, message });
+    throw new BadRequestError('Preencha o título da votação e coloque no mínimo duas opções');
   } else if (title.length > 60) {
-    const message = new Message('O título só pode ter até 60 caracteres', 'error');
-    return res.status(400).json({ success: false, message });
+    throw new BadRequestError('O título só pode ter até 60 caracteres');
   }
   const [poll] = await db('polls').insert({ title, id_user: user.id }).returning('id');
   session.lastPollID = poll.id;
   choices.forEach(async (choice) => {
     await db('poll_choices').insert({ id_poll: poll.id, description: choice });
   });
-  res.status(201).json({ success: true, pollID: poll.id });
+  res.status(StatusCodes.CREATED).json({ success: true, pollID: poll.id });
 });
 
 const endPoll = asyncWrapper(async (req, res) => {
@@ -51,16 +50,18 @@ const endPoll = asyncWrapper(async (req, res) => {
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {
-    const message = new Message('Apenas o dono da votação pode encerrá-la', 'error');
-    return res.status(403).json({ success: false, message });
+    throw new ForbiddenError('Apenas o dono da votação pode encerrá-la');
   }
-  // Caso a votação não exista ou esteja encerrada
-  else if (!poll || !poll.is_active) {
-    const message = new Message('Votação não encontrada ou encerrada', 'error');
-    return res.status(404).json({ success: false, message });
+  // Caso a votação esteja encerrada
+  else if (!poll.is_active) {
+    throw new BadRequestError('Essa votação já foi encerrada');
+  } 
+  // Caso a votação não tenha sido encontrada
+  else if (!poll) {
+    throw new NotFoundError('Votação não encontrada');
   }
   await db('polls').where({ id }).update({ is_active: false });
-  res.status(200).json({ success: true });
+  res.status(StatusCodes.OK).json({ success: true });
 });
 
 const searchPolls = asyncWrapper(async (req, res) => {
@@ -69,19 +70,19 @@ const searchPolls = asyncWrapper(async (req, res) => {
 
   // Caso o título digitado pelo usuário esteja vazio
   if (!title) {
-    return res.status(400).redirect('/');
+    return res.status(StatusCodes.BAD_REQUEST).redirect('/');
   }
   const polls = await db('polls')
     .innerJoin('users', 'polls.id_user', 'users.id')
     .whereILike('title', `%${title}%`)
     .select('polls.*', 'users.username');
-  res.status(200).render('polls/busca', { req, polls, title });
+  res.status(StatusCodes.OK).render('polls/busca', { req, polls, title });
 });
 
 const getChoices = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
-  res.status(200).json({ choices });
+  res.status(StatusCodes.OK).json({ choices });
 });
 
 const updateChoice = asyncWrapper(async (req, res) => {
@@ -89,18 +90,16 @@ const updateChoice = asyncWrapper(async (req, res) => {
   const [poll] = await db('polls').where({ id: pollID });
 
   if (!poll || !poll.is_active) {
-    const message = new Message('A votação está finalizada', 'error');
-    return res.status(400).json({ success: false, message });
+    throw new BadRequestError('A votação está finalizada');
   }
   const [choice] = await db('poll_choices')
     .where({ id: choiceID, id_poll: pollID })
     .update({ number_of_votes: db.raw('number_of_votes + 1') }, ['number_of_votes']);
 
   if (!choice) {
-    const message = new Message('Opção inválida', 'error');
-    return res.status(404).json({ success: false, message });
+    throw new NotFoundError('Opção não encontrada');
   }
-  res.status(200).json({ success: true, choice });
+  res.status(StatusCodes.OK).json({ success: true, choice });
 });
 
 module.exports = {

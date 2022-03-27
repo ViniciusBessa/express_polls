@@ -19,7 +19,7 @@ pollForm.addEventListener('submit', async (event) => {
     data = await data.json();
 
     if (!data.success) {
-      throw data.message.text;
+      throw data.message;
     } else {
       pollAlert.innerText = 'Voto contado com sucesso!';
     }
@@ -70,7 +70,7 @@ endPollButton.addEventListener('click', async () => {
     if (data.success) {
       document.location.reload();
     } else {
-      throw data.message.text;
+      throw data.message;
     }
   } catch (error) {
     pollAlert.innerText = error;

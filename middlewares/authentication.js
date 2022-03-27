@@ -10,7 +10,7 @@ const authMiddleware = async (req, res, next) => {
     // Caso o usuário Anonymous não esteja no banco de dados
     if (!anonymousUser) {
       const username = 'Anonymous';
-      const email = randomBytes(15).toString('hex');
+      const email = randomBytes(16).toString('hex');
       const password = randomUUID();
       const salt = randomBytes(16).toString('hex');
       [anonymousUser] = await db('users').insert({ username, email, password, salt }).returning('id', 'username', 'email');
