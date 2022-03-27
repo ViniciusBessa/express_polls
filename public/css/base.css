@@ -13,15 +13,15 @@ body {
 }
 
 .theme-dark {
-  --primary-color: #6de490;
-  --secondary-color: #80dbb1;
+  --primary-color: #F08335;
+  --secondary-color: #f8a971;
   --background-color: #393939;
   --font-color: #ffffff;
 }
 
 .theme-light {
-  --primary-color: #6de490;
-  --secondary-color: #80dbb1;
+  --primary-color: #162C9a;
+  --secondary-color: #6c7ed6;
   --background-color: #f4f4f4;
   --font-color: #000000;
 }
