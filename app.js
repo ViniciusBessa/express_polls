@@ -2,6 +2,11 @@ const express = require('express');
 require('dotenv').config();
 const nunjucks = require('nunjucks');
 
+// Security packages
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+
 // Session storage
 const session = require('express-session');
 const KnexSessionStore = require('connect-session-knex')(session);
@@ -25,6 +30,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/css', express.static('./public/css'));
 app.use('/script', express.static('./public/script'));
 app.use('/images', express.static('./public/images'));
+
+// Security settings
+app.set('trust_proxy', 1);
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 100,
+  })
+);
+app.use(helmet());
+app.use(xss());
 
 // Template engine configuration
 nunjucks.configure('views', {
@@ -61,8 +77,4 @@ app.use(notFound);
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
-const startServer = async () => {
-  app.listen(port, () => console.log(`The server is listening on port ${port}...`));
-};
-
-startServer();
+app.listen(port, () => console.log(`The server is listening on port ${port}...`));
