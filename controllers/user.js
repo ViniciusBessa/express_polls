@@ -18,8 +18,8 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
   if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
-  } else if (username.length > 20) {
-    const message = new Message('O nome de usuário só pode ter até 20 caracteres');
+  } else if (username.length > 30) {
+    const message = new Message('O nome de usuário só pode ter até 30 caracteres');
     return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
