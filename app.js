@@ -62,7 +62,9 @@ const sess = {
 };
 
 if (process.env.ENVIRONMENT === 'production') {
+  sess.proxy = true;
   sess.cookie.secure = true;
+  sess.cookie.sameSite = 'none';
 }
 
 app.use(session(sess));
