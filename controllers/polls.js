@@ -82,7 +82,11 @@ const searchPolls = asyncWrapper(async (req, res) => {
 const getChoices = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const choices = await db('poll_choices').where({ id_poll: id }).orderBy('id');
-  res.status(StatusCodes.OK).json({ choices });
+
+  if (choices.length === 0) {
+    throw new NotFoundError(`Não foram encontradas opções de uma votação com id ${id}`);
+  }
+  res.status(StatusCodes.OK).json({ success: true, choices });
 });
 
 const updateChoice = asyncWrapper(async (req, res) => {

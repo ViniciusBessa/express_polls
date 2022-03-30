@@ -5,7 +5,7 @@ const authMiddleware = async (req, res, next) => {
   const { session } = req;
 
   if (!session.userID) {
-    let [anonymousUser] = await db('users').where({ username: 'Anonymous' }).select('id', 'username');
+    let [anonymousUser] = await db('users').where({ username: 'Anonymous' }).select('id', 'username', 'email');
 
     // Caso o usuário Anonymous não esteja no banco de dados
     if (!anonymousUser) {
