@@ -1,7 +1,7 @@
 const asyncWrapper = require('../middlewares/async-wrapper');
 const { StatusCodes } = require('http-status-codes');
 const Message = require('../middlewares/message');
-const db = require('../db/db');
+const knex = require('../db/db');
 const { randomBytes, scryptSync, timingSafeEqual } = require('crypto');
 
 const getPaginaCadastro = asyncWrapper(async (req, res) => {
@@ -23,8 +23,8 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
     return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
-  const [userExist] = await db('users').whereILike('username', `%${username}%`).select('username');
-  const [emailInUse] = await db('users').where({ email }).select('email');
+  const [userExist] = await knex('users').whereILike('username', `%${username}%`).select('username');
+  const [emailInUse] = await knex('users').where({ email }).select('email');
 
   // Verificando se o nome de usuário ou o e-mail já estão em uso
   if (userExist) {
@@ -37,7 +37,7 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
   // Criptografando a senha do usuário e o registrando no banco de dados
   const salt = randomBytes(16).toString('hex');
   let hashedPassword = scryptSync(password, salt, 64).toString('hex');
-  const [userData] = await db('users').insert({ username, password: hashedPassword, email, salt }).returning('id');
+  const [userData] = await knex('users').insert({ username, password: hashedPassword, email, salt }).returning('id');
   session.userID = userData.id;
   res.status(StatusCodes.CREATED).redirect('/');
 });
@@ -56,7 +56,7 @@ const logarUsuario = asyncWrapper(async (req, res) => {
     const message = new Message('Preencha todos os campos', 'error');
     return res.status(StatusCodes.BAD_REQUEST).render('user/login', { message });
   }
-  let [userData] = await db('users').whereILike('username', `%${username}%`).select('id', 'password', 'salt');
+  let [userData] = await knex('users').whereILike('username', `%${username}%`).select('id', 'password', 'salt');
 
   if (!userData) {
     const message = new Message('Usuário não encontrado', 'error');
@@ -84,7 +84,7 @@ const deslogarUsuario = asyncWrapper(async (req, res) => {
 
 const getUserPolls = asyncWrapper(async (req, res) => {
   const { user } = req;
-  const polls = await db('polls').where({ id_user: user.id });
+  const polls = await knex('polls').where({ id_user: user.id });
   res.status(StatusCodes.OK).render('user/userPolls', { req, polls });
 });
 
