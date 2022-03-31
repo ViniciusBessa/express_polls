@@ -6,7 +6,9 @@ let choicesCount = 3;
 formDOM.addEventListener('submit', async (event) => {
   try {
     event.preventDefault();
-    const { title, ...choices } = Object.fromEntries(new FormData(formDOM).entries());
+    const { title, ...choices } = Object.fromEntries(
+      new FormData(formDOM).entries()
+    );
 
     let data = await fetch('/polls', {
       method: 'POST',

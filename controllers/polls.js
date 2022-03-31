@@ -14,11 +14,23 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   }
   const pollIsActive = poll.is_active;
   const userIsOwner =
-    user.id === Number(poll.id_user) && (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
-  const choices = await knex('poll_choices').where({ id_poll: id }).orderBy('id');
+    user.id === Number(poll.id_user) &&
+    (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
+  const choices = await knex('poll_choices')
+    .where({ id_poll: id })
+    .orderBy('id');
   let totalVotes = 0;
   choices.forEach((choice) => (totalVotes += choice.number_of_votes));
-  res.status(StatusCodes.OK).render('polls/poll', { req, choices, poll, pollIsActive, userIsOwner, totalVotes });
+  res
+    .status(StatusCodes.OK)
+    .render('polls/poll', {
+      req,
+      choices,
+      poll,
+      pollIsActive,
+      userIsOwner,
+      totalVotes,
+    });
 });
 
 const createPoll = asyncWrapper(async (req, res) => {
@@ -29,14 +41,21 @@ const createPoll = asyncWrapper(async (req, res) => {
   choices = choices.filter((choice) => choice.trim().length > 0);
 
   if (!title || title.length === 0 || choices.length <= 1) {
-    throw new BadRequestError('Preencha o título da votação e coloque no mínimo duas opções');
+    throw new BadRequestError(
+      'Preencha o título da votação e coloque no mínimo duas opções'
+    );
   } else if (title.length > 60) {
     throw new BadRequestError('O título só pode ter até 60 caracteres');
   }
-  const [poll] = await knex('polls').insert({ title, id_user: user.id }).returning('id');
+  const [poll] = await knex('polls')
+    .insert({ title, id_user: user.id })
+    .returning('id');
   session.lastPollID = poll.id;
   choices.forEach(async (choice) => {
-    await knex('poll_choices').insert({ id_poll: poll.id, description: choice });
+    await knex('poll_choices').insert({
+      id_poll: poll.id,
+      description: choice,
+    });
   });
   res.status(StatusCodes.CREATED).json({ success: true, pollID: poll.id });
 });
@@ -46,7 +65,8 @@ const endPoll = asyncWrapper(async (req, res) => {
   const { id } = req.params;
   const [poll] = await knex('polls').where({ id });
   const userIsOwner =
-    user.id === Number(poll.id_user) && (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
+    user.id === Number(poll.id_user) &&
+    (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {
@@ -55,7 +75,7 @@ const endPoll = asyncWrapper(async (req, res) => {
   // Caso a votação esteja encerrada
   else if (!poll.is_active) {
     throw new BadRequestError('Essa votação já foi encerrada');
-  } 
+  }
   // Caso a votação não tenha sido encontrada
   else if (!poll) {
     throw new NotFoundError('Votação não encontrada');
@@ -81,10 +101,14 @@ const searchPolls = asyncWrapper(async (req, res) => {
 
 const getChoices = asyncWrapper(async (req, res) => {
   const { id } = req.params;
-  const choices = await knex('poll_choices').where({ id_poll: id }).orderBy('id');
+  const choices = await knex('poll_choices')
+    .where({ id_poll: id })
+    .orderBy('id');
 
   if (choices.length === 0) {
-    throw new NotFoundError(`Não foram encontradas opções de uma votação com id ${id}`);
+    throw new NotFoundError(
+      `Não foram encontradas opções de uma votação com id ${id}`
+    );
   }
   res.status(StatusCodes.OK).json({ success: true, choices });
 });
@@ -98,7 +122,9 @@ const updateChoice = asyncWrapper(async (req, res) => {
   }
   const [choice] = await knex('poll_choices')
     .where({ id: choiceID, id_poll: pollID })
-    .update({ number_of_votes: knex.raw('number_of_votes + 1') }, ['number_of_votes']);
+    .update({ number_of_votes: knex.raw('number_of_votes + 1') }, [
+      'number_of_votes',
+    ]);
 
   if (!choice) {
     throw new NotFoundError('Opção não encontrada');

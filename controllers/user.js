@@ -15,13 +15,24 @@ const registerUser = asyncWrapper(async (req, res) => {
   password = password.trim();
   email = email.trim();
 
-  if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
+  if (
+    !username ||
+    !password ||
+    !email ||
+    username.length === 0 ||
+    password.length === 0 ||
+    email.length === 0
+  ) {
     throw new BadRequestError('Preencha todos os campos');
   } else if (username.length > 30) {
-    throw new BadRequestError('O nome de usuário só pode ter até 30 caracteres');
+    throw new BadRequestError(
+      'O nome de usuário só pode ter até 30 caracteres'
+    );
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
-  const [userExist] = await knex('users').whereILike('username', `%${username}%`).select('username');
+  const [userExist] = await knex('users')
+    .whereILike('username', `%${username}%`)
+    .select('username');
   const [emailInUse] = await knex('users').where({ email }).select('email');
 
   // Verificando se o nome de usuário ou o e-mail já estão em uso
@@ -50,13 +61,20 @@ const loginUser = asyncWrapper(async (req, res) => {
   username = username.trim();
   password = password.trim();
 
-  if (!username || !password || username.length === 0 || password.length === 0) {
+  if (
+    !username ||
+    !password ||
+    username.length === 0 ||
+    password.length === 0
+  ) {
     throw new BadRequestError('Preencha todos os campos');
   }
   let [user] = await knex('users').whereILike('username', `%${username}%`);
 
   if (!user) {
-    throw new NotFoundError(`Usuário com o nome ${username} não foi encontrado`);
+    throw new NotFoundError(
+      `Usuário com o nome ${username} não foi encontrado`
+    );
   }
   // Retirando a senha criptografada e o salt utilizado
   const { password: userKey, salt } = user;
@@ -69,7 +87,9 @@ const loginUser = asyncWrapper(async (req, res) => {
     throw new BadRequestError('Senha inserida está incorreta');
   }
   session.userID = user.id;
-  res.status(StatusCodes.OK).json({ success: true, user: { id: user.id, username: user.username } });
+  res
+    .status(StatusCodes.OK)
+    .json({ success: true, user: { id: user.id, username: user.username } });
 });
 
 const logoutUser = asyncWrapper(async (req, res) => {

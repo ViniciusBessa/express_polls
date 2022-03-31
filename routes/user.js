@@ -13,8 +13,14 @@ const {
   getUserPolls,
 } = require('../controllers/user');
 
-router.route('/register').get(logoutRequired, getRegisterPage).post(logoutRequired, registerUser);
-router.route('/login').get(logoutRequired, getLoginPage).post(logoutRequired, loginUser);
+router
+  .route('/register')
+  .get(logoutRequired, getRegisterPage)
+  .post(logoutRequired, registerUser);
+router
+  .route('/login')
+  .get(logoutRequired, getLoginPage)
+  .post(logoutRequired, loginUser);
 router.route('/logout').get(logoutUser);
 router.route('/polls').get(loginRequired, getUserPolls);
 

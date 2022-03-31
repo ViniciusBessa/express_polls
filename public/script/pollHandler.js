@@ -1,5 +1,7 @@
 const pollForm = document.querySelector('.poll');
-const choicesDOM = Array.from(document.getElementsByClassName('poll__container'));
+const choicesDOM = Array.from(
+  document.getElementsByClassName('poll__container')
+);
 const endPollButton = document.getElementById('end-poll-button');
 const pollTotalVotes = document.getElementById('poll-total-votes');
 const pollAlert = document.querySelector('.poll__alert');
@@ -48,8 +50,10 @@ async function getUpdatedChoices() {
 
     // Atualizando a porcentagem de votos da escolha
     if (totalVotes > 0) {
-      choiceVotesPercentage.innerText = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
-      choiceProgressBar.style.width = Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
+      choiceVotesPercentage.innerText =
+        Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
+      choiceProgressBar.style.width =
+        Math.round((choice.number_of_votes / totalVotes) * 100) + '%';
     } else {
       choiceVotesPercentage.innerText = '0%';
       choiceProgressBar.style.width = '0%';
