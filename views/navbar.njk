@@ -1,7 +1,7 @@
 <nav class="navbar">
   <button class="navbar__toggler"></button>
   <div class="navbar__container collapsed">
-    <ul class="navbar__menu">
+    <ul class="navbar__menu navbar__menu--start">
       <li>
         <a class="navbar__link" href="/">Início</a>
       </li>
@@ -16,13 +16,13 @@
       <button class="search__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
     </form>
     {% if req.user.isAuthenticated %}
-      <ul class="navbar__menu">
+      <ul class="navbar__menu navbar__menu--end">
         <li>
           <a class="navbar__link" href="/account/logout">Sair</a>
         </li>
       </ul>
     {% else %}
-      <ul class="navbar__menu">
+      <ul class="navbar__menu navbar__menu--end">
         <li>
           <a class="navbar__link" href="/account/register">Cadastrar</a>
         </li>
