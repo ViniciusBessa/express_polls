@@ -79,4 +79,6 @@ app.use(notFound);
 app.use(errorHandler);
 
 const port = process.env.PORT || 5000;
-app.listen(port, () => console.log(`The server is listening on port ${port}...`));
+const server = app.listen(port, () => console.log(`The server is listening on port ${port}...`));
+
+module.exports = server;

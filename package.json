@@ -4,7 +4,8 @@
   "description": "Um site que permite a criação de votações online.",
   "main": "app.js",
   "scripts": {
-    "test": "npm test",
+    "pretest": "npx knex migrate:rollback --all && npx knex migrate:latest",
+    "test": "jest --detectOpenHandles",
     "start": "node app.js",
     "start-dev": "nodemon app.js"
   },
@@ -36,6 +37,8 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "jest": "^27.5.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }
