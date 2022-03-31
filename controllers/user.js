@@ -33,9 +33,11 @@ const registerUser = asyncWrapper(async (req, res) => {
   // Criptografando a senha do usuário e o registrando no banco de dados
   const salt = randomBytes(16).toString('hex');
   let hashedPassword = scryptSync(password, salt, 64).toString('hex');
-  const [userData] = await knex('users').insert({ username, password: hashedPassword, email, salt }).returning('id');
-  session.userID = userData.id;
-  res.status(StatusCodes.CREATED).json({ success: true });
+  const [user] = await knex('users')
+    .insert({ username, password: hashedPassword, email, salt })
+    .returning(['id', 'username']);
+  session.userID = user.id;
+  res.status(StatusCodes.CREATED).json({ success: true, user });
 });
 
 const getLoginPage = asyncWrapper(async (req, res) => {
@@ -51,13 +53,13 @@ const loginUser = asyncWrapper(async (req, res) => {
   if (!username || !password || username.length === 0 || password.length === 0) {
     throw new BadRequestError('Preencha todos os campos');
   }
-  let [userData] = await knex('users').whereILike('username', `%${username}%`).select('id', 'password', 'salt');
+  let [user] = await knex('users').whereILike('username', `%${username}%`);
 
-  if (!userData) {
+  if (!user) {
     throw new NotFoundError(`Usuário com o nome ${username} não foi encontrado`);
   }
   // Retirando a senha criptografada e o salt utilizado
-  const { password: userKey, salt } = userData;
+  const { password: userKey, salt } = user;
   const hashedBuffer = scryptSync(password, salt, 64);
   const hashedKey = Buffer.from(userKey, 'hex');
   const passwordMatch = timingSafeEqual(hashedBuffer, hashedKey);
@@ -66,8 +68,8 @@ const loginUser = asyncWrapper(async (req, res) => {
   if (!passwordMatch) {
     throw new BadRequestError('Senha inserida está incorreta');
   }
-  session.userID = userData.id;
-  res.status(StatusCodes.OK).redirect('/');
+  session.userID = user.id;
+  res.status(StatusCodes.OK).json({ success: true, user: { id: user.id, username: user.username } });
 });
 
 const logoutUser = asyncWrapper(async (req, res) => {
