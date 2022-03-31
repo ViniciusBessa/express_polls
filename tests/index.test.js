@@ -1,13 +1,10 @@
-const server = require('./app');
+const app = require('../app');
 const supertest = require('supertest');
 
 describe('Index endpoints', () => {
   let requestTest;
   beforeEach(() => {
-    requestTest = supertest(server);
-  });
-  afterEach((done) => {
-    server.close(done);
+    requestTest = supertest(app);
   });
   it('GET / should return the homepage', async () => {
     const res = await requestTest.get('/');

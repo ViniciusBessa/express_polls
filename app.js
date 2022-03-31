@@ -78,7 +78,4 @@ app.use('/polls', pollsRouter);
 app.use(notFound);
 app.use(errorHandler);
 
-const port = process.env.PORT || 5000;
-const server = app.listen(port, () => console.log(`The server is listening on port ${port}...`));
-
-module.exports = server;
+module.exports = app;
