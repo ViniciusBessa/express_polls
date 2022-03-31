@@ -1,6 +1,6 @@
 const asyncWrapper = require('../middlewares/async-wrapper');
 const { StatusCodes } = require('http-status-codes');
-const Message = require('../middlewares/message');
+const { BadRequestError, NotFoundError } = require('../errors');
 const knex = require('../db/db');
 const { randomBytes, scryptSync, timingSafeEqual } = require('crypto');
 
@@ -16,11 +16,9 @@ const registerUser = asyncWrapper(async (req, res) => {
   email = email.trim();
 
   if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
-    const message = new Message('Preencha todos os campos', 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
+    throw new BadRequestError('Preencha todos os campos');
   } else if (username.length > 30) {
-    const message = new Message('O nome de usuário só pode ter até 30 caracteres');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
+    throw new BadRequestError('O nome de usuário só pode ter até 30 caracteres');
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
   const [userExist] = await knex('users').whereILike('username', `%${username}%`).select('username');
@@ -28,18 +26,16 @@ const registerUser = asyncWrapper(async (req, res) => {
 
   // Verificando se o nome de usuário ou o e-mail já estão em uso
   if (userExist) {
-    const message = new Message(`O nome ${userExist.username} já está em uso`, 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
+    throw new BadRequestError(`O nome ${userExist.username} já está em uso`);
   } else if (emailInUse) {
-    const message = new Message(`O e-mail ${emailInUse.email} já está em uso`, 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
+    throw new BadRequestError(`O e-mail ${emailInUse.email} já está em uso`);
   }
   // Criptografando a senha do usuário e o registrando no banco de dados
   const salt = randomBytes(16).toString('hex');
   let hashedPassword = scryptSync(password, salt, 64).toString('hex');
   const [userData] = await knex('users').insert({ username, password: hashedPassword, email, salt }).returning('id');
   session.userID = userData.id;
-  res.status(StatusCodes.CREATED).redirect('/');
+  res.status(StatusCodes.CREATED).json({ success: true });
 });
 
 const getLoginPage = asyncWrapper(async (req, res) => {
@@ -53,14 +49,12 @@ const loginUser = asyncWrapper(async (req, res) => {
   password = password.trim();
 
   if (!username || !password || username.length === 0 || password.length === 0) {
-    const message = new Message('Preencha todos os campos', 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/login', { message });
+    throw new BadRequestError('Preencha todos os campos');
   }
   let [userData] = await knex('users').whereILike('username', `%${username}%`).select('id', 'password', 'salt');
 
   if (!userData) {
-    const message = new Message('Usuário não encontrado', 'error');
-    return res.status(StatusCodes.NOT_FOUND).render('user/login', { message });
+    throw new NotFoundError(`Usuário com o nome ${username} não foi encontrado`);
   }
   // Retirando a senha criptografada e o salt utilizado
   const { password: userKey, salt } = userData;
@@ -70,8 +64,7 @@ const loginUser = asyncWrapper(async (req, res) => {
 
   // Verificando se a senha digitada pelo usuário é a mesma que está no banco de dados
   if (!passwordMatch) {
-    const message = new Message('Senha inserida está incorreta', 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/login', { message });
+    throw new BadRequestError('Senha inserida está incorreta');
   }
   session.userID = userData.id;
   res.status(StatusCodes.OK).redirect('/');
