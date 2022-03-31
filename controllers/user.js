@@ -4,11 +4,11 @@ const Message = require('../middlewares/message');
 const knex = require('../db/db');
 const { randomBytes, scryptSync, timingSafeEqual } = require('crypto');
 
-const getPaginaCadastro = asyncWrapper(async (req, res) => {
-  res.status(StatusCodes.OK).render('user/cadastro');
+const getRegisterPage = asyncWrapper(async (req, res) => {
+  res.status(StatusCodes.OK).render('user/register');
 });
 
-const cadastrarUsuario = asyncWrapper(async (req, res) => {
+const registerUser = asyncWrapper(async (req, res) => {
   let { username, password, email } = req.body;
   const { session } = req;
   username = username.trim();
@@ -17,10 +17,10 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
 
   if (!username || !password || !email || username.length === 0 || password.length === 0 || email.length === 0) {
     const message = new Message('Preencha todos os campos', 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
+    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
   } else if (username.length > 30) {
     const message = new Message('O nome de usuário só pode ter até 30 caracteres');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
+    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
   }
   // Buscando por usuários que já possuam o mesmo nome ou e-mail
   const [userExist] = await knex('users').whereILike('username', `%${username}%`).select('username');
@@ -29,10 +29,10 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
   // Verificando se o nome de usuário ou o e-mail já estão em uso
   if (userExist) {
     const message = new Message(`O nome ${userExist.username} já está em uso`, 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
+    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
   } else if (emailInUse) {
     const message = new Message(`O e-mail ${emailInUse.email} já está em uso`, 'error');
-    return res.status(StatusCodes.BAD_REQUEST).render('user/cadastro', { message });
+    return res.status(StatusCodes.BAD_REQUEST).render('user/register', { message });
   }
   // Criptografando a senha do usuário e o registrando no banco de dados
   const salt = randomBytes(16).toString('hex');
@@ -42,11 +42,11 @@ const cadastrarUsuario = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.CREATED).redirect('/');
 });
 
-const getPaginaLogin = asyncWrapper(async (req, res) => {
+const getLoginPage = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.OK).render('user/login');
 });
 
-const logarUsuario = asyncWrapper(async (req, res) => {
+const loginUser = asyncWrapper(async (req, res) => {
   let { username, password } = req.body;
   const { session } = req;
   username = username.trim();
@@ -77,7 +77,7 @@ const logarUsuario = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.OK).redirect('/');
 });
 
-const deslogarUsuario = asyncWrapper(async (req, res) => {
+const logoutUser = asyncWrapper(async (req, res) => {
   req.session.destroy();
   res.status(StatusCodes.OK).redirect('/');
 });
@@ -89,10 +89,10 @@ const getUserPolls = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
-  getPaginaCadastro,
-  cadastrarUsuario,
-  getPaginaLogin,
-  logarUsuario,
-  deslogarUsuario,
+  getRegisterPage,
+  registerUser,
+  getLoginPage,
+  loginUser,
+  logoutUser,
   getUserPolls,
 };

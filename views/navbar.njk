@@ -7,27 +7,27 @@
       </li>
       {% if req.user.isAuthenticated %}
         <li>
-          <a class="navbar__link" href="/conta/polls">Minhas votações</a>
+          <a class="navbar__link" href="/account/polls">Minhas votações</a>
         </li>
       {% endif %}
     </ul>
-    <form class="navbar__busca" action="/polls/busca" method="GET">
-      <input class="busca__input" type="search" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Digite o título de uma votação" maxlength="60"/>
-      <button class="busca__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
+    <form class="navbar__search" action="/polls/search" method="GET">
+      <input class="search__input" type="search" name="title" pattern=".*\S.*" title="Digite pelo menos 1 caractere." required placeholder="Digite o título de uma votação" maxlength="60"/>
+      <button class="search__submit-button" type="submit"><img src="/images/magnifying_glass.png" alt="Imagem de uma lupa" width="25" height="auto"/></button>
     </form>
     {% if req.user.isAuthenticated %}
       <ul class="navbar__menu">
         <li>
-          <a class="navbar__link" href="/conta/logout">Sair</a>
+          <a class="navbar__link" href="/account/logout">Sair</a>
         </li>
       </ul>
     {% else %}
       <ul class="navbar__menu">
         <li>
-          <a class="navbar__link" href="/conta/cadastro">Cadastrar</a>
+          <a class="navbar__link" href="/account/register">Cadastrar</a>
         </li>
         <li>
-          <a class="navbar__link" href="/conta/login">Entrar</a>
+          <a class="navbar__link" href="/account/login">Entrar</a>
         </li>
       </ul>
     {% endif %}

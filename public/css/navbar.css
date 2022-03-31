@@ -48,13 +48,13 @@
   opacity: 75%;
 }
 
-.navbar__busca {
+.navbar__search {
   display: flex;
   width: 300px;
   margin: auto;
 }
 
-.busca__input {
+.search__input {
   height: 30px;
   width: 90%;
   outline: none;
@@ -64,14 +64,14 @@
   border-radius: 10px 0px 0px 10px;
 }
 
-.busca__submit-button {
+.search__submit-button {
   height: 30px;
   background-color: var(--secondary-color);
   border: 1px solid transparent;
   border-radius: 0px 10px 10px 0px;
 }
 
-.busca__submit-button:hover {
+.search__submit-button:hover {
   opacity: 75%;
 }
 
@@ -90,7 +90,7 @@
     display: inline;
   }
 
-  .navbar__busca {
+  .navbar__search {
     width: 100%;
     margin: 0;
   }

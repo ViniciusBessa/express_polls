@@ -1,11 +1,11 @@
 {% extends "base.njk" %}
 
 {% block head %}
-  <link rel="stylesheet" href="/css/formulario.css">
+  <link rel="stylesheet" href="/css/form.css">
 {% endblock %}
 
 {% block main %}
-  <form class="form" action="/conta/login" method="POST">
+  <form class="form" action="/account/login" method="POST">
     <h1 class="form__title">Entrar</h1>
     <label for="username">Nome de usuário</label>
     <input class="form__input" name="username" type="text" required placeholder="Digite o seu nome de usuário" autocomplete="nickname" minlength="4" maxlength="30"/>

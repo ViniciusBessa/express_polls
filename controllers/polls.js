@@ -76,7 +76,7 @@ const searchPolls = asyncWrapper(async (req, res) => {
     .innerJoin('users', 'polls.id_user', 'users.id')
     .whereILike('title', `%${title}%`)
     .select('polls.*', 'users.username');
-  res.status(StatusCodes.OK).render('polls/busca', { req, polls, title });
+  res.status(StatusCodes.OK).render('polls/search', { req, polls, title });
 });
 
 const getChoices = asyncWrapper(async (req, res) => {

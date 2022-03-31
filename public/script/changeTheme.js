@@ -1,15 +1,15 @@
-function mudarTema() {
+function changeTheme() {
   if (localStorage.theme == 'dark') {
-    colocarTema('light');
+    setTheme('light');
   } else {
-    colocarTema('dark');
+    setTheme('dark');
   }
 }
 
-function colocarTema(nomeTema) {
+function setTheme(themeName) {
   const html = document.documentElement;
 
-  if (nomeTema == 'light') {
+  if (themeName == 'light') {
     html.className = 'theme-light';
     localStorage.theme = 'light';
   } else {
@@ -18,4 +18,4 @@ function colocarTema(nomeTema) {
   }
 }
 
-colocarTema(localStorage.theme);
+setTheme(localStorage.theme);

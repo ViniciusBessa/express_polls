@@ -72,7 +72,7 @@ app.use(authMiddleware);
 
 // Routes
 app.use('/', indexRouter);
-app.use('/conta', userRouter);
+app.use('/account', userRouter);
 app.use('/polls', pollsRouter);
 
 app.use(notFound);
