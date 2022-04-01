@@ -8,13 +8,14 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const { pollId } = req.params;
   const [poll] = await knex('polls').where({ id: pollId });
 
+  // Repassando o request para a página de erro 404
   if (!poll) {
-    throw new NotFoundError(`Votação com o id ${pollId} não foi encontrada`);
+    return next();
   }
   const pollIsActive = poll.is_active;
   const userIsOwner =
     user.id === Number(poll.id_user) &&
-    (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
+    (user.lastPollId === Number(poll.id) || user.username !== 'Anonymous');
   const choices = await knex('poll_choices')
     .where({ id_poll: pollId })
     .orderBy('id');
@@ -51,7 +52,7 @@ const createPoll = asyncWrapper(async (req, res) => {
   const [poll] = await knex('polls')
     .insert({ title, id_user: user.id })
     .returning('id');
-  session.lastPollID = poll.id;
+  session.lastPollId = poll.id;
   choices.forEach(async (choice) => {
     await knex('poll_choices').insert({
       id_poll: poll.id,
@@ -72,7 +73,7 @@ const endPoll = asyncWrapper(async (req, res) => {
   }
   const userIsOwner =
     user.id === Number(poll.id_user) &&
-    (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
+    (user.lastPollId === Number(poll.id) || user.username !== 'Anonymous');
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {

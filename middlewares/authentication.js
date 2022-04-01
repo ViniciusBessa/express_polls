@@ -7,7 +7,7 @@ const authMiddleware = async (req, res, next) => {
   if (!session.userID) {
     let [anonymousUser] = await knex('users')
       .where({ username: 'Anonymous' })
-      .select('id', 'username', 'email');
+      .select('id', 'username');
 
     // Caso o usuário Anonymous não esteja no banco de dados
     if (!anonymousUser) {
@@ -17,10 +17,10 @@ const authMiddleware = async (req, res, next) => {
       const salt = randomBytes(16).toString('hex');
       [anonymousUser] = await knex('users')
         .insert({ username, email, password, salt })
-        .returning('id', 'username', 'email');
+        .returning('id', 'username');
     }
     req.user = anonymousUser;
-    req.user.lastPollID = session.lastPollID;
+    req.user.lastPollId = session.lastPollId;
     req.user.isAuthenticated = false;
     return next();
   }
@@ -28,7 +28,7 @@ const authMiddleware = async (req, res, next) => {
     .where({ id: session.userID })
     .select('id', 'username', 'email');
   req.user = user;
-  req.user.lastPollID = session.lastPollID;
+  req.user.lastPollId = session.lastPollId;
   req.user.isAuthenticated = true;
   next();
 };

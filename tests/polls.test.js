@@ -4,12 +4,15 @@ const supertest = require('supertest');
 describe('Polls endpoints', () => {
   let requestTest, cookie;
   beforeAll(async () => {
-    requestTest = supertest(app);
+    requestTest = supertest(app)
     const user = await requestTest
       .post('/account/login')
       .send({ username: 'Mike', password: 'password2' });
     cookie = user.headers['set-cookie'];
   });
+  beforeEach(async () => {
+    requestTest = supertest(app);
+  })
   // Testing the route GET /polls/:pollId
   it('GET /polls/1 should return the page of the first poll', async () => {
     const res = await requestTest.get('/polls/1');
