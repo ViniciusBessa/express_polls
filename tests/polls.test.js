@@ -52,4 +52,33 @@ describe('Polls endpoints', () => {
     const res = await requestTest.patch('/polls/10').set('Cookie', cookie);
     expect(res.status).toEqual(404);
   });
+  // Testing the route GET /polls/search
+  it('GET /polls/search should return the search page', async () => {
+    const res = await requestTest.get('/polls/search?title=Poll+1');
+    expect(res.status).toEqual(200);
+  });
+  // Testing the route GET /polls/:pollID/choices
+  it('GET /polls/1/choices should return all the choices of the poll with id 1', async () => {
+    const res = await requestTest.get('/polls/1/choices');
+    expect(res.status).toEqual(200);
+    expect(res.body.choices).toBeTruthy();
+  });
+  it('GET /polls/10/choices should fail to find the choices with error 404', async () => {
+    const res = await requestTest.get('/polls/10/choices');
+    expect(res.status).toEqual(404);
+  });
+  // Testing the route PATCH /polls/:pollID/choices/:choiceID
+  it('PATCH /polls/3/choices/6 should update the number of votes of the choice', async () => {
+    const res = await requestTest.patch('/polls/3/choices/6');
+    expect(res.status).toEqual(200);
+    expect(res.body.choice).toBeTruthy();
+  });
+  it('PATCH /polls/2/choices/3 should fail to update the choice with error 400', async () => {
+    const res = await requestTest.patch('/polls/2/choices/3');
+    expect(res.status).toEqual(400);
+  });
+  it('PATCH /polls/3/choices/10 should fail to update the choice with error 404', async () => {
+    const res = await requestTest.patch('/polls/3/choices/10');
+    expect(res.status).toEqual(404);
+  });
 });
