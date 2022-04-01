@@ -10,7 +10,7 @@ describe('Polls endpoints', () => {
       .send({ username: 'Mike', password: 'password2' });
     cookie = user.headers['set-cookie'];
   });
-  // Testing the route GET /polls/:id
+  // Testing the route GET /polls/:pollId
   it('GET /polls/1 should return the page of the first poll', async () => {
     const res = await requestTest.get('/polls/1');
     expect(res.status).toEqual(200);
@@ -33,9 +33,9 @@ describe('Polls endpoints', () => {
       })
       .set('Cookie', cookie);
     expect(res.status).toEqual(201);
-    expect(res.body.pollID).toBeTruthy();
+    expect(res.body.pollId).toBeTruthy();
   });
-  // Testing the route PATCH /polls/:id
+  // Testing the route PATCH /polls/:pollId
   it('PATCH /polls/1 should finish the poll', async () => {
     const res = await requestTest.patch('/polls/1').set('Cookie', cookie);
     expect(res.status).toEqual(200);
@@ -57,7 +57,7 @@ describe('Polls endpoints', () => {
     const res = await requestTest.get('/polls/search?title=Poll+1');
     expect(res.status).toEqual(200);
   });
-  // Testing the route GET /polls/:pollID/choices
+  // Testing the route GET /polls/:pollId/choices
   it('GET /polls/1/choices should return all the choices of the poll with id 1', async () => {
     const res = await requestTest.get('/polls/1/choices');
     expect(res.status).toEqual(200);
@@ -67,7 +67,7 @@ describe('Polls endpoints', () => {
     const res = await requestTest.get('/polls/10/choices');
     expect(res.status).toEqual(404);
   });
-  // Testing the route PATCH /polls/:pollID/choices/:choiceID
+  // Testing the route PATCH /polls/:pollId/choices/:choiceId
   it('PATCH /polls/3/choices/6 should update the number of votes of the choice', async () => {
     const res = await requestTest.patch('/polls/3/choices/6');
     expect(res.status).toEqual(200);

@@ -12,8 +12,8 @@ const {
 
 router.route('/').post(createPoll);
 router.route('/search').get(searchPolls);
-router.route('/:id').get(getPoll).patch(endPoll);
-router.route('/:id/choices').get(getChoices);
-router.route('/:pollID/choices/:choiceID').patch(updateChoice);
+router.route('/:pollId').get(getPoll).patch(endPoll);
+router.route('/:pollId/choices').get(getChoices);
+router.route('/:pollId/choices/:choiceId').patch(updateChoice);
 
 module.exports = router;
