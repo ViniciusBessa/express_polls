@@ -64,6 +64,11 @@ const endPoll = asyncWrapper(async (req, res) => {
   const { user } = req;
   const { id } = req.params;
   const [poll] = await knex('polls').where({ id });
+
+  // Caso a votação não tenha sido encontrada
+  if (!poll) {
+    throw new NotFoundError('Votação não encontrada');
+  }
   const userIsOwner =
     user.id === Number(poll.id_user) &&
     (user.lastPollID === Number(poll.id) || user.username !== 'Anonymous');
@@ -75,10 +80,6 @@ const endPoll = asyncWrapper(async (req, res) => {
   // Caso a votação esteja encerrada
   else if (!poll.is_active) {
     throw new BadRequestError('Essa votação já foi encerrada');
-  }
-  // Caso a votação não tenha sido encontrada
-  else if (!poll) {
-    throw new NotFoundError('Votação não encontrada');
   }
   await knex('polls').where({ id }).update({ is_active: false });
   res.status(StatusCodes.OK).json({ success: true });
