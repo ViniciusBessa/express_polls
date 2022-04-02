@@ -38,8 +38,10 @@ async function getUpdatedChoices() {
   const { choices } = await choicesData.json();
 
   // Calculando o número total de votos
-  let totalVotes = 0;
-  choices.forEach((choice) => (totalVotes += choice.number_of_votes));
+  let totalVotes = choices.reduce(
+    (res, choice) => res + choice.number_of_votes,
+    0
+  );
   pollTotalVotes.innerText = `Total de votos: ${totalVotes}`;
 
   for (let index = 0; index < choices.length; index++) {

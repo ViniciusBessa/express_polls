@@ -19,8 +19,7 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const choices = await knex('poll_choices')
     .where({ id_poll: pollId })
     .orderBy('id');
-  let totalVotes = 0;
-  choices.forEach((choice) => (totalVotes += choice.number_of_votes));
+  const totalVotes = choices.reduce((res, choice) => res + choice.number_of_votes, 0);
   res.status(StatusCodes.OK).render('polls/poll', {
     req,
     choices,

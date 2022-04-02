@@ -22,7 +22,7 @@ formDOM.addEventListener('submit', async (event) => {
     if (!data.success) {
       formAlert.innerText = data.message;
     } else {
-      document.location.replace(`/polls/${data.pollID}`);
+      document.location.replace(`/polls/${data.pollId}`);
     }
   } catch (err) {
     formAlert.innerText = data.message;
