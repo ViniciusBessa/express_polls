@@ -7,7 +7,6 @@ exports.seed = async function (knex) {
   await knex('users').del();
   await knex('users').insert([
     {
-      id: 1,
       username: 'Anonymous',
       email: 'anonymous@somedomain.com',
       password:
@@ -15,7 +14,6 @@ exports.seed = async function (knex) {
       salt: 'salt1',
     },
     {
-      id: 2,
       username: 'Mike',
       email: 'mike@somedomain.com',
       password:
@@ -23,7 +21,6 @@ exports.seed = async function (knex) {
       salt: 'salt2',
     },
     {
-      id: 3,
       username: 'Mary',
       email: 'mary@somedomain.com',
       password:
@@ -31,7 +28,6 @@ exports.seed = async function (knex) {
       salt: 'salt3',
     },
     {
-      id: 4,
       username: 'John',
       email: 'john@somedomain.com',
       password:

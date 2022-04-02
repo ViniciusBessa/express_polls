@@ -6,6 +6,7 @@ describe('Index endpoints', () => {
   beforeEach(() => {
     requestTest = supertest(app);
   });
+
   it('GET / should return the homepage', async () => {
     const res = await requestTest.get('/');
     expect(res.status).toEqual(200);
