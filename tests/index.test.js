@@ -1,5 +1,6 @@
 const app = require('../app');
 const supertest = require('supertest');
+const { StatusCodes } = require('http-status-codes');
 
 describe('Index endpoints', () => {
   let requestTest;
@@ -9,6 +10,6 @@ describe('Index endpoints', () => {
 
   it('GET / should return the homepage', async () => {
     const res = await requestTest.get('/');
-    expect(res.status).toEqual(200);
+    expect(res.status).toEqual(StatusCodes.OK);
   });
 });
