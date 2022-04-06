@@ -33,38 +33,3 @@ body {
 .font-color {
   color: var(--font-color);
 }
-
-/* Alerts */
-.alert {
-  border-radius: 100px;
-  padding: 12px;
-  margin: 15px auto;
-  width: fit-content;
-  color: #000000;
-}
-
-.alert__button {
-  background-color: transparent;
-  border: 1px solid #000000;
-  border-radius: 50%;
-  font-size: 0.9em;
-}
-
-.alert__button:hover {
-  opacity: 50%;
-}
-
-.alert--success {
-  background-color: #3ada70;
-  border: 1px solid #228845;
-}
-
-.alert--warning {
-  background-color: #f2cf18;
-  border: 1px solid #c1a616;
-}
-
-.alert--error {
-  background-color: #f54c41;
-  border: 1px solid #c94239;
-}
