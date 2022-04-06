@@ -4,7 +4,8 @@ const { randomUUID, randomBytes } = require('crypto');
 const authMiddleware = async (req, res, next) => {
   const { session } = req;
 
-  if (!session.userID) {
+  // Função que retorna o usuário Anonymous
+  const getAnonymousUser = async () => {
     let [anonymousUser] = await knex('users')
       .where({ username: 'Anonymous' })
       .select('id', 'username');
@@ -19,14 +20,26 @@ const authMiddleware = async (req, res, next) => {
         .insert({ username, email, password, salt })
         .returning('id', 'username');
     }
-    req.user = anonymousUser;
-    req.user.lastPollId = session.lastPollId;
-    req.user.isAuthenticated = false;
+    anonymousUser;
+    anonymousUser.lastPollId = session.lastPollId;
+    anonymousUser.isAuthenticated = false;
+    return anonymousUser;
+  };
+
+  // Se o usuário não tiver os cookies de uma conta registrada
+  if (!session.userId) {
+    req.user = await getAnonymousUser();
     return next();
   }
   const [user] = await knex('users')
-    .where({ id: session.userID })
+    .where({ id: session.userId })
     .select('id', 'username', 'email');
+
+  // Se os cookies do usuário não corresponderem a nenhuma conta
+  if (!user) {
+    req.user = await getAnonymousUser();
+    return next();
+  }
   req.user = user;
   req.user.lastPollId = session.lastPollId;
   req.user.isAuthenticated = true;

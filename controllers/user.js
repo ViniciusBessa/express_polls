@@ -47,7 +47,7 @@ const registerUser = asyncWrapper(async (req, res) => {
   const [user] = await knex('users')
     .insert({ username, password: hashedPassword, email, salt })
     .returning(['id', 'username']);
-  session.userID = user.id;
+  session.userId = user.id;
   res.status(StatusCodes.CREATED).json({ success: true, user });
 });
 
@@ -86,7 +86,7 @@ const loginUser = asyncWrapper(async (req, res) => {
   if (!passwordMatch) {
     throw new BadRequestError('Senha inserida está incorreta');
   }
-  session.userID = user.id;
+  session.userId = user.id;
   res
     .status(StatusCodes.OK)
     .json({ success: true, user: { id: user.id, username: user.username } });
