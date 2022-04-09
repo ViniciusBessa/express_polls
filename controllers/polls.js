@@ -15,11 +15,14 @@ const getPoll = asyncWrapper(async (req, res, next) => {
   const pollIsActive = poll.is_active;
   const userIsOwner =
     user.id === Number(poll.id_user) &&
-    (user.lastPollId === Number(poll.id) || user.username !== 'Anonymous');
+    (user.createdPolls.includes(poll.id) || user.username !== 'Anonymous');
   const choices = await knex('poll_choices')
     .where({ id_poll: pollId })
     .orderBy('id');
-  const totalVotes = choices.reduce((res, choice) => res + choice.number_of_votes, 0);
+  const totalVotes = choices.reduce(
+    (res, choice) => res + choice.number_of_votes,
+    0
+  );
   res.status(StatusCodes.OK).render('polls/poll', {
     req,
     choices,
@@ -51,7 +54,7 @@ const createPoll = asyncWrapper(async (req, res) => {
   const [poll] = await knex('polls')
     .insert({ title, id_user: user.id })
     .returning('id');
-  session.lastPollId = poll.id;
+  session.createdPolls.push(poll.id);
   choices.forEach(async (choice) => {
     await knex('poll_choices').insert({
       id_poll: poll.id,
@@ -72,7 +75,7 @@ const endPoll = asyncWrapper(async (req, res) => {
   }
   const userIsOwner =
     user.id === Number(poll.id_user) &&
-    (user.lastPollId === Number(poll.id) || user.username !== 'Anonymous');
+    (user.createdPolls.includes(poll.id) || user.username !== 'Anonymous');
 
   // Caso o usuário não seja o dono da votação
   if (!userIsOwner) {

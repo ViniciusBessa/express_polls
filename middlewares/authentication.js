@@ -3,6 +3,8 @@ const { randomUUID, randomBytes } = require('crypto');
 
 const authMiddleware = async (req, res, next) => {
   const { session } = req;
+  // Garantndo que a chave createdPolls não esteja undefined
+  session.createdPolls = session.createdPolls || [];
 
   // Função que retorna o usuário Anonymous
   const getAnonymousUser = async () => {
@@ -21,7 +23,7 @@ const authMiddleware = async (req, res, next) => {
         .returning('id', 'username');
     }
     anonymousUser;
-    anonymousUser.lastPollId = session.lastPollId;
+    anonymousUser.createdPolls = session.createdPolls;
     anonymousUser.isAuthenticated = false;
     return anonymousUser;
   };
@@ -41,7 +43,7 @@ const authMiddleware = async (req, res, next) => {
     return next();
   }
   req.user = user;
-  req.user.lastPollId = session.lastPollId;
+  req.user.createdPolls = session.createdPolls;
   req.user.isAuthenticated = true;
   next();
 };
