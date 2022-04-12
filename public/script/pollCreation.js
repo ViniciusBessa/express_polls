@@ -6,7 +6,7 @@ let choicesCount = 3;
 formDOM.addEventListener('submit', async (event) => {
   try {
     event.preventDefault();
-    const { title, ...choices } = Object.fromEntries(
+    const { title, duplicates, ...choices } = Object.fromEntries(
       new FormData(formDOM).entries()
     );
 
@@ -15,7 +15,7 @@ formDOM.addEventListener('submit', async (event) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: JSON.stringify({ title, choices }),
+      body: JSON.stringify({ title, choices, duplicates }),
     });
     data = await data.json();
 

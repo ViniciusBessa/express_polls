@@ -32,11 +32,17 @@
   margin-bottom: 30px;
 }
 
+.form__checkbox {
+  margin: 5px;
+}
+
 .form__submit-button {
+  display: block;
   background-color: transparent;
   border: 1px solid var(--primary-color);
   color: var(--primary-color);
   padding: 5px;
+  margin-top: 15px;
 }
 
 .form__submit-button:hover {

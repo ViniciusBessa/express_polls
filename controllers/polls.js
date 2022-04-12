@@ -35,7 +35,8 @@ const getPoll = asyncWrapper(async (req, res, next) => {
 
 const createPoll = asyncWrapper(async (req, res) => {
   const { session, user } = req;
-  let { title, choices } = req.body;
+  let { title, choices, duplicates } = req.body;
+  duplicates = duplicates === 'on' ? true : false;
 
   if (!title || title.trim().length === 0 || !choices) {
     throw new BadRequestError(
@@ -52,7 +53,7 @@ const createPoll = asyncWrapper(async (req, res) => {
     throw new BadRequestError('O título só pode ter até 60 caracteres');
   }
   const [poll] = await knex('polls')
-    .insert({ title, id_user: user.id })
+    .insert({ title, id_user: user.id, check_duplicates: duplicates })
     .returning('id');
   session.createdPolls.push(poll.id);
   choices.forEach(async (choice) => {
@@ -119,6 +120,7 @@ const getChoices = asyncWrapper(async (req, res) => {
 });
 
 const updateChoice = asyncWrapper(async (req, res) => {
+  const { session, user } = req;
   const { pollId, choiceId } = req.params;
   const [poll] = await knex('polls').where({ id: pollId });
 
@@ -128,6 +130,8 @@ const updateChoice = asyncWrapper(async (req, res) => {
     );
   } else if (!poll.is_active) {
     throw new BadRequestError('A votação está finalizada');
+  } else if (poll.check_duplicates && user.votedPolls.includes(poll.id)) {
+    throw new BadRequestError('Essa votação só permite um voto por usuário');
   }
   const [choice] = await knex('poll_choices')
     .where({ id: choiceId, id_poll: pollId })
@@ -137,6 +141,10 @@ const updateChoice = asyncWrapper(async (req, res) => {
 
   if (!choice) {
     throw new NotFoundError('Opção não encontrada');
+  }
+  // Registrando que o usuário já participou dessa votação
+  if (!user.votedPolls.includes(poll.id)) {
+    session.votedPolls.push(poll.id);
   }
   res.status(StatusCodes.OK).json({ success: true, choice });
 });
