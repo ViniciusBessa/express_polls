@@ -4,6 +4,7 @@ const { StatusCodes } = require('http-status-codes');
 
 describe('Polls endpoints', () => {
   let requestTest, cookie;
+
   beforeAll(async () => {
     requestTest = supertest(app);
     const user = await requestTest
@@ -22,7 +23,7 @@ describe('Polls endpoints', () => {
     expect(res.status).toEqual(StatusCodes.OK);
   });
 
-  it('GET /polls/10 should fail with error 404', async () => {
+  it('GET /polls/10 should fail to get the poll page with error 404', async () => {
     const res = await requestTest.get('/polls/10');
     expect(res.status).toEqual(StatusCodes.NOT_FOUND);
   });
@@ -85,9 +86,20 @@ describe('Polls endpoints', () => {
 
   // Testing the route PATCH /polls/:pollId/choices/:choiceId
   it('PATCH /polls/3/choices/6 should update the number of votes of the choice', async () => {
-    const res = await requestTest.patch('/polls/3/choices/6');
+    const res = await requestTest
+      .patch('/polls/3/choices/6')
+      .set('Cookie', cookie);
     expect(res.status).toEqual(StatusCodes.OK);
     expect(res.body.choice).toBeTruthy();
+  });
+
+  it('PATCH /polls/3/choices/6 should fail because of duplicate vote with error 400', async () => {
+    const firstVote = await requestTest.patch('/polls/3/choices/6');
+    const voteCookie = firstVote.headers['set-cookie'];
+    const res = await requestTest
+      .patch('/polls/3/choices/6')
+      .set('Cookie', voteCookie);
+    expect(res.status).toEqual(StatusCodes.BAD_REQUEST);
   });
 
   it('PATCH /polls/2/choices/3 should fail to update the choice with error 400', async () => {
