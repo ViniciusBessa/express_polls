@@ -39,6 +39,7 @@ describe('Polls endpoints', () => {
           choice2: 'Choice-2',
           choice3: 'Choice-3',
         },
+        duplicates: 'on',
       })
       .set('Cookie', cookie);
     expect(res.status).toEqual(StatusCodes.CREATED);
@@ -89,6 +90,16 @@ describe('Polls endpoints', () => {
     const res = await requestTest
       .patch('/polls/3/choices/6')
       .set('Cookie', cookie);
+    expect(res.status).toEqual(StatusCodes.OK);
+    expect(res.body.choice).toBeTruthy();
+  });
+
+  it('PATCH /polls/5/choices/11 should successfully vote two times in the same poll', async () => {
+    const firstVote = await requestTest.patch('/polls/5/choices/11');
+    const voteCookie = firstVote.headers['set-cookie'];
+    const res = await requestTest
+      .patch('/polls/5/choices/11')
+      .set('Cookie', voteCookie);
     expect(res.status).toEqual(StatusCodes.OK);
     expect(res.body.choice).toBeTruthy();
   });

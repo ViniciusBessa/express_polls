@@ -16,5 +16,7 @@ exports.seed = async function (knex) {
     { id_poll: 3, description: 'Choice 8' },
     { id_poll: 4, description: 'Choice 9' },
     { id_poll: 4, description: 'Choice 10' },
+    { id_poll: 5, description: 'Choice 11' },
+    { id_poll: 5, description: 'Choice 12' },
   ]);
 };

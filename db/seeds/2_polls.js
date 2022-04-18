@@ -24,5 +24,10 @@ exports.seed = async function (knex) {
       title: 'Poll 4',
       is_active: false,
     },
+    {
+      id_user: 4,
+      title: 'Poll 5',
+      check_duplicates: false,
+    },
   ]);
 };

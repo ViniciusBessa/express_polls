@@ -36,16 +36,16 @@ const getPoll = asyncWrapper(async (req, res, next) => {
 const createPoll = asyncWrapper(async (req, res) => {
   const { session, user } = req;
   let { title, choices, duplicates } = req.body;
-  duplicates = duplicates === 'on' ? true : false;
 
   if (!title || title.trim().length === 0 || !choices) {
     throw new BadRequestError(
       'Preencha o título da votação e escreva as opções'
     );
   }
-  choices = Object.values(choices);
   title = title.trim();
+  choices = Object.values(choices);
   choices = choices.filter((choice) => choice.trim().length > 0);
+  duplicates = !duplicates ? false : true;
 
   if (choices.length <= 1) {
     throw new BadRequestError('Coloque no mínimo duas opções');
