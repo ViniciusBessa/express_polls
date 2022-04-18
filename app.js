@@ -52,12 +52,12 @@ nunjucks.configure('views', {
 app.set('view engine', 'njk');
 
 // Session configuration
-const fiftenDays = 1000 * 60 * 60 * 24 * 15;
+const fifteenDays = 1000 * 60 * 60 * 24 * 15;
 const sess = {
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { maxAge: fiftenDays },
+  cookie: { maxAge: fifteenDays },
   store,
 };
 
