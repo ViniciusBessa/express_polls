@@ -11,6 +11,10 @@ Nesse site o usuário pode:
 - Pesquisar por votações através do título
 - Finalizar suas votações
 
+## Tecnologias utilizadas
+
+**HTML, CSS, Javascript, Node.js, Express.js e PostgreSQL.**
+
 ## Instalando as dependências
 
 Para instalar todos os pacotes, basta executar o comando:
