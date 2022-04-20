@@ -3,7 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, ForbiddenError, NotFoundError } = require('../errors');
 const knex = require('../db/db');
 
-const getPoll = asyncWrapper(async (req, res, next) => {
+const getPollPage = asyncWrapper(async (req, res, next) => {
   const { user } = req;
   const { pollId } = req.params;
   const [poll] = await knex('polls').where({ id: pollId });
@@ -90,7 +90,7 @@ const endPoll = asyncWrapper(async (req, res) => {
   res.status(StatusCodes.OK).json({ success: true });
 });
 
-const searchPolls = asyncWrapper(async (req, res) => {
+const searchPollsPage = asyncWrapper(async (req, res) => {
   let { title } = req.query;
 
   // Caso o título digitado pelo usuário esteja vazio
@@ -150,10 +150,10 @@ const updateChoice = asyncWrapper(async (req, res) => {
 });
 
 module.exports = {
-  getPoll,
+  getPollPage,
   createPoll,
   endPoll,
-  searchPolls,
+  searchPollsPage,
   getChoices,
   updateChoice,
 };
